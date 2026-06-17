@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Kiki850">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1d2348">
+<link rel="manifest" id="manifest-link">
+<title>Kiki850 — TOEIC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--night:#1d2348;--night2:#2a3168;--gold:#f6b53c;--gold-soft:#fcd98c;--gold-deep:#e09a1f;--cream:#fbf6ec;--cream2:#f2e7d3;--paper:#fffdf8;--ink:#1b1e34;--muted:#7e84a3;--sage:#36a07c;--sage-soft:#d6efe4;--berry:#e15f7c;--berry-soft:#fbe0e6;--peri:#6f6ce6;--peri-soft:#e6e5fb;}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0;}
+body{background:#1d2348;font-family:'Plus Jakarta Sans',system-ui,sans-serif;}
+.kiki-root{color:var(--ink);min-height:100vh;min-height:100dvh;background:radial-gradient(120% 80% at 50% -10%,#2a3168 0%,#1d2348 55%,#161b3a 100%);display:flex;justify-content:center;}
+.phone{width:100%;max-width:470px;min-height:100vh;min-height:100dvh;background:var(--cream);overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.45);display:flex;flex-direction:column;}
+@media(min-width:520px){.phone{min-height:880px;margin:24px 0;border-radius:34px;}}
+.scroll{flex:1;overflow-y:auto;padding:0 18px 130px;}.scroll::-webkit-scrollbar{width:0;}
+.topbar{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,var(--cream) 70%,rgba(251,246,236,0));padding:max(env(safe-area-inset-top),18px) 0 12px;display:flex;align-items:center;gap:10px;}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:21px;letter-spacing:-.5px;}.brand b{color:var(--gold-deep);}
+.pill{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:12.5px;padding:7px 11px;border-radius:999px;}
+.pill.streak{background:var(--berry-soft);color:#c2425f;}.pill.xp{background:var(--peri-soft);color:#4b48b8;}.pill.lvl{background:var(--gold-soft);color:#7a4e06;font-size:11px;}
+.spacer{flex:1;}
+/* Splash */
+.splash{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:44px 24px;min-height:100dvh;}
+.splash-title{font-family:'Fraunces',serif;font-weight:900;font-size:36px;letter-spacing:-.5px;margin:18px 0 8px;}.splash-title b{color:var(--gold-deep);}
+.splash-sub{font-size:15px;color:var(--muted);line-height:1.65;max-width:300px;margin-bottom:36px;}
+.divider{display:flex;align-items:center;gap:10px;width:100%;margin:14px 0;}.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--cream2);}.divider span{font-size:12px;color:var(--muted);font-weight:600;}
+/* Assessment */
+.shead{display:flex;align-items:center;gap:12px;padding:max(env(safe-area-inset-top),18px) 18px 8px;}
+.xclose{background:none;border:none;font-size:26px;color:var(--muted);cursor:pointer;line-height:1;}
+.pbar{flex:1;height:12px;background:var(--cream2);border-radius:999px;overflow:hidden;}.pbar>i{display:block;height:100%;background:linear-gradient(90deg,var(--gold-deep),var(--gold));border-radius:999px;transition:width .4s;}
+.progress-mini{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:20px;}
+.progress-mini .dot{width:9px;height:9px;border-radius:50%;background:var(--cream2);flex-shrink:0;transition:background .2s;}
+.progress-mini .dot.done{background:var(--gold);}.progress-mini .dot.cur{background:var(--night2);transform:scale(1.35);}
+/* Assess result */
+.assess-wrap{display:flex;flex-direction:column;align-items:center;padding:28px 18px;}
+.assess-title{font-family:'Fraunces',serif;font-weight:800;font-size:24px;margin:14px 0 5px;}
+.assess-score{font-family:'Space Mono';font-size:13px;color:var(--muted);margin-bottom:4px;}
+.level-card{border-radius:22px;padding:20px 22px;margin:16px 0 14px;text-align:left;width:100%;}
+.level-card.b1{background:linear-gradient(135deg,#2a3168,#3d4a9a);}.level-card.b1b2{background:linear-gradient(135deg,#1d6b5e,#2a9a80);}.level-card.b2{background:linear-gradient(135deg,#6b4a00,#e09a1f);}
+.level-name{font-family:'Space Mono',monospace;font-weight:700;font-size:23px;color:#fff;line-height:1.2;}
+.level-toeic{font-size:13px;color:rgba(255,255,255,.7);margin-top:4px;}.level-desc{font-size:13.5px;color:rgba(255,255,255,.9);margin-top:10px;line-height:1.5;}
+.reco-bar{background:var(--night);border-radius:14px;padding:13px 14px;margin-bottom:9px;display:flex;align-items:flex-start;gap:11px;text-align:left;width:100%;}
+.reco-icon{font-size:20px;flex-shrink:0;margin-top:1px;}.reco-text{font-size:13px;font-weight:600;color:var(--cream);line-height:1.45;}.reco-text span{color:var(--gold-soft);}
+/* Scorecard */
+.scorecard{background:var(--night);color:var(--cream);border-radius:24px;padding:20px;margin:4px 0 16px;position:relative;overflow:hidden;}
+.scorecard::after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(246,181,60,.28),transparent 70%);}
+.score-num{font-family:'Space Mono',monospace;font-size:44px;font-weight:700;line-height:1;color:var(--gold);}
+.score-lbl{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#aab0d8;}
+.gaugewrap{display:flex;gap:16px;align-items:center;}.gaugebar{flex:1;height:11px;background:#11152e;border-radius:999px;overflow:hidden;margin-top:6px;}
+.gaugefill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--gold-deep),var(--gold) 70%,var(--gold-soft));transition:width .9s cubic-bezier(.2,.8,.2,1);}
+.gauge-meta{font-size:11.5px;color:#aab0d8;margin-top:7px;display:flex;justify-content:space-between;}
+/* Sections/units */
+.sectionhead{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--night);color:var(--cream);border:none;border-radius:18px;padding:15px 16px;margin:10px 0 0;cursor:pointer;}
+.sdot{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:19px;background:rgba(255,255,255,.1);flex-shrink:0;}
+.stitle{font-family:'Fraunces',serif;font-weight:700;font-size:15.5px;line-height:1.15;}.ssub{font-size:11.5px;color:#aab0d8;margin-top:2px;}.scount{font-family:'Space Mono';font-size:12px;color:var(--gold);font-weight:700;}
+.chev{transition:transform .25s;color:#aab0d8;font-size:13px;}.chev.open{transform:rotate(90deg);}
+.unitwrap{padding:8px 0 2px;}
+.unit{display:flex;align-items:center;gap:13px;width:100%;text-align:left;background:var(--paper);border:1.5px solid var(--cream2);border-radius:17px;padding:12px 14px;margin-bottom:9px;cursor:pointer;transition:transform .12s;}
+.unit:not(.locked):active{transform:scale(.985);}.unit.locked{opacity:.5;cursor:not-allowed;}.unit.done{border-color:var(--sage-soft);}.unit.recommended{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold-soft);}
+.u-emoji{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:20px;flex-shrink:0;}
+.u-title{font-weight:700;font-size:14px;line-height:1.2;}.u-sub{font-size:11.5px;color:var(--muted);margin-top:2px;}
+.u-prog{height:5px;background:var(--cream2);border-radius:999px;overflow:hidden;margin-top:7px;}.u-prog>i{display:block;height:100%;background:var(--sage);border-radius:999px;transition:width .5s;}
+.u-right{flex-shrink:0;color:var(--muted);font-weight:800;font-size:12px;}.chk{width:24px;height:24px;border-radius:50%;background:var(--sage);display:grid;place-items:center;}
+/* Buttons */
+.btn{font-family:inherit;font-weight:800;border:none;border-radius:16px;cursor:pointer;font-size:16px;padding:16px;width:100%;transition:transform .12s;}.btn:active{transform:translateY(2px);}
+.btn-gold{background:var(--gold);color:#3a2a06;box-shadow:0 5px 0 var(--gold-deep);}.btn-gold:active{box-shadow:0 1px 0 var(--gold-deep);}
+.btn-night{background:var(--night);color:var(--cream);box-shadow:0 5px 0 #11152e;}.btn-night:active{box-shadow:0 1px 0 #11152e;}
+.btn-ghost{background:transparent;color:var(--night2);border:1.5px solid var(--cream2);box-shadow:none;}
+.btn-sage{background:var(--sage);color:#fff;box-shadow:0 5px 0 #277a5d;}.btn-sage:active{box-shadow:0 1px 0 #277a5d;}
+.btn[disabled]{opacity:.4;cursor:not-allowed;}
+/* Questions */
+.qtype{font-size:11px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:var(--gold-deep);margin-bottom:6px;}
+.qprompt{font-family:'Fraunces',serif;font-size:19px;font-weight:600;line-height:1.3;margin-bottom:4px;}.qhint{font-size:13px;color:var(--muted);margin-bottom:16px;font-style:italic;}
+.sentence{background:var(--paper);border:1.5px solid var(--cream2);border-radius:18px;padding:17px;font-size:18px;line-height:1.7;margin-bottom:16px;}
+.blank{display:inline-block;min-width:60px;border-bottom:3px solid var(--gold);text-align:center;font-weight:800;color:var(--gold-deep);}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--paper);border:2px solid var(--cream2);border-radius:15px;padding:14px 15px;margin-bottom:10px;cursor:pointer;font-size:15.5px;font-weight:600;transition:transform .1s,border-color .15s,background .15s;}
+.opt:active{transform:scale(.99);}.opt .lab{width:27px;height:27px;border-radius:9px;background:var(--cream2);color:var(--night2);display:grid;place-items:center;font-weight:800;font-size:13px;flex-shrink:0;}
+.opt.correct{border-color:var(--sage);background:var(--sage-soft);}.opt.correct .lab{background:var(--sage);color:#fff;}
+.opt.wrong{border-color:var(--berry);background:var(--berry-soft);}.opt.wrong .lab{background:var(--berry);color:#fff;}
+.opt[disabled]{cursor:default;}
+.fillin{width:100%;font-family:inherit;font-size:18px;font-weight:700;text-align:center;padding:16px;border-radius:16px;border:2px solid var(--cream2);background:var(--paper);color:var(--ink);outline:none;}
+.fillin:focus{border-color:var(--gold);}.fillin.ok{border-color:var(--sage);background:var(--sage-soft);}.fillin.no{border-color:var(--berry);background:var(--berry-soft);}
+.answerzone{min-height:60px;background:var(--paper);border:2px dashed var(--cream2);border-radius:16px;padding:10px;display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start;margin-bottom:14px;}
+.answerzone.empty{display:grid;place-items:center;color:var(--muted);font-style:italic;font-size:14px;}
+.bank{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px;}
+.chip{font-family:inherit;font-weight:700;font-size:14px;padding:10px 13px;border-radius:12px;border:2px solid var(--cream2);background:var(--cream);cursor:pointer;transition:transform .1s;}
+.chip:active{transform:scale(.94);}.chip.placed{background:var(--peri-soft);border-color:#cfcdf6;color:#4b48b8;}.chip.used{opacity:.28;pointer-events:none;}
+/* Audio */
+.listenbig{width:110px;height:110px;border-radius:50%;border:none;cursor:pointer;margin:6px auto 16px;display:grid;place-items:center;background:radial-gradient(circle at 50% 35%,var(--night2),var(--night));color:var(--gold);box-shadow:0 10px 30px rgba(29,35,72,.35);position:relative;}
+.listenbig.playing::before,.listenbig.playing::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--gold);opacity:.6;animation:ping 1.4s ease-out infinite;}.listenbig.playing::after{animation-delay:.6s;}
+@keyframes ping{to{inset:-26px;opacity:0;}}
+.replay{display:flex;align-items:center;gap:7px;justify-content:center;background:none;border:none;color:var(--peri);font-weight:700;font-size:14px;cursor:pointer;margin:0 auto 16px;}
+.transcript{background:var(--peri-soft);border-radius:14px;padding:12px 14px;font-size:14px;margin-top:4px;line-height:1.5;}
+/* Feedback */
+.feedback{position:sticky;bottom:0;left:0;right:0;padding:16px 18px max(env(safe-area-inset-bottom),18px);background:var(--paper);border-top:1.5px solid var(--cream2);animation:slideUp .3s ease;}
+.feedback.ok{background:var(--sage-soft);border-top-color:#bfe6d5;}.feedback.no{background:var(--berry-soft);border-top-color:#f5cdd6;}
+@keyframes slideUp{from{transform:translateY(40px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.fb-title{font-family:'Fraunces',serif;font-weight:800;font-size:18px;display:flex;gap:8px;align-items:center;}.fb-title.ok{color:#1d7a59;}.fb-title.no{color:#bf3f5c;}
+.fb-explain{font-size:14px;color:#444;margin:6px 0 14px;line-height:1.5;}.fb-explain b{color:var(--night2);}
+.kiki-row{display:flex;align-items:flex-end;gap:11px;margin:8px 0 16px;}
+.bubble{background:var(--paper);border:1.5px solid var(--cream2);border-radius:18px 18px 18px 4px;padding:12px 15px;font-size:14px;font-weight:600;line-height:1.4;flex:1;box-shadow:0 4px 14px rgba(29,35,72,.06);}
+/* Results */
+.result-wrap{text-align:center;padding:28px 22px;}
+.confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.conf{position:absolute;width:9px;height:14px;border-radius:2px;top:-20px;animation:fall linear forwards;}
+@keyframes fall{to{transform:translateY(900px) rotate(540deg);opacity:.2;}}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:20px 0;}
+.stat{background:var(--paper);border:1.5px solid var(--cream2);border-radius:17px;padding:15px;}.stat .v{font-family:'Space Mono';font-size:25px;font-weight:700;color:var(--night2);}.stat .l{font-size:11.5px;color:var(--muted);margin-top:2px;}
+.delta{display:inline-flex;align-items:center;gap:6px;background:var(--sage-soft);color:#1d7a59;font-weight:800;padding:8px 14px;border-radius:999px;font-size:13.5px;}
+.footnote{font-size:11px;color:var(--muted);text-align:center;margin:16px 4px 0;line-height:1.5;}
+.install-banner{background:var(--night);color:var(--cream);border-radius:16px;padding:14px 16px;margin:0 0 16px;font-size:13px;line-height:1.5;}.install-banner b{color:var(--gold-soft);}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important;}}
+
+/* ===== PWA Install Popup ===== */
+.pwa-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:flex-end;justify-content:center;}
+.pwa-sheet{background:#fff;border-radius:28px 28px 0 0;padding:22px 20px max(env(safe-area-inset-bottom),22px);width:100%;max-width:470px;animation:slideUp .35s cubic-bezier(.2,.8,.2,1);}
+.pwa-handle{width:36px;height:4px;background:var(--cream2);border-radius:999px;margin:0 auto 18px;}
+.pwa-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.pwa-title{font-family:'Fraunces',serif;font-weight:800;font-size:18px;color:var(--night);line-height:1.2;}
+.pwa-sub{font-size:12.5px;color:var(--muted);margin-top:3px;}
+.pwa-close{margin-left:auto;background:var(--cream2);border:none;width:30px;height:30px;border-radius:50%;font-size:18px;color:var(--muted);cursor:pointer;display:grid;place-items:center;flex-shrink:0;}
+.pwa-steps{display:flex;flex-direction:column;gap:13px;margin-bottom:20px;}
+.pwa-step{display:flex;align-items:center;gap:13px;font-size:14.5px;font-weight:600;color:var(--ink);}
+.pwa-num{width:28px;height:28px;border-radius:50%;background:var(--gold);color:#3a2a06;display:grid;place-items:center;font-weight:800;font-size:13px;flex-shrink:0;}
+.pwa-share-icon{display:inline-flex;align-items:center;gap:3px;color:var(--peri);background:var(--peri-soft);padding:3px 7px;border-radius:6px;font-size:12px;}
+.pwa-arrow{text-align:center;font-size:26px;color:var(--gold-deep);margin-bottom:12px;animation:arrowBounce 1s ease infinite;}
+@keyframes arrowBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(7px);}}
+.pwa-skip{background:none;border:none;font-size:13px;color:var(--muted);cursor:pointer;display:block;width:100%;text-align:center;padding:8px;margin-top:4px;}
+
+
+/* ===== Settings & AI ===== */
+.settings-wrap{padding:22px 0 40px;}
+.api-box{background:var(--paper);border:1.5px solid var(--cream2);border-radius:18px;padding:16px;}
+.api-box.active{border-color:var(--sage);background:var(--sage-soft);}
+.api-status{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.api-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}.api-dot.on{background:var(--sage);}.api-dot.off{background:var(--berry);}
+.api-label{font-weight:700;font-size:14px;}
+.api-hint{font-size:12.5px;color:var(--muted);line-height:1.5;margin-bottom:12px;}
+.api-input{width:100%;font-family:'Space Mono',monospace;font-size:13px;padding:12px 14px;border-radius:12px;border:1.5px solid var(--cream2);background:var(--cream);color:var(--ink);outline:none;}
+.api-input:focus{border-color:var(--gold);}
+.api-link{font-size:12px;color:var(--peri);font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:4px;margin-top:8px;}
+.settings-card{background:var(--paper);border:1.5px solid var(--cream2);border-radius:16px;padding:16px;font-size:13.5px;line-height:1.7;color:var(--ink);margin-bottom:12px;}
+.info-night{background:var(--night);color:var(--cream);border-radius:16px;padding:16px;margin-bottom:14px;font-size:13px;line-height:1.6;}
+.info-night b{color:var(--gold-soft);}
+.settings-label{font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin:20px 0 10px;}
+.ai-btn{display:inline-flex;align-items:center;gap:4px;font-family:inherit;font-weight:700;font-size:11px;padding:5px 9px;border-radius:8px;border:none;background:var(--peri-soft);color:var(--peri);cursor:pointer;flex-shrink:0;margin-left:6px;}
+.gen-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150;display:flex;align-items:center;justify-content:center;padding:20px;}
+.gen-modal{background:#fff;border-radius:24px;padding:28px 24px;width:100%;max-width:420px;text-align:center;animation:scaleIn .25s ease;}
+@keyframes scaleIn{from{transform:scale(.92);opacity:0;}to{transform:scale(1);opacity:1;}}
+.spinner{width:44px;height:44px;border:4px solid var(--cream2);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.gen-error{background:var(--berry-soft);border-radius:12px;padding:12px;font-size:13px;color:#bf3f5c;margin-bottom:14px;line-height:1.5;}
+.gen-title{font-family:'Fraunces',serif;font-weight:800;font-size:19px;margin:14px 0 6px;}
+.gen-sub{font-size:13.5px;color:var(--muted);margin-bottom:20px;line-height:1.5;}
+
+
+.count-selector{display:flex;gap:8px;justify-content:center;margin-bottom:20px;}
+.count-btn{font-family:inherit;font-weight:800;font-size:15px;padding:10px 18px;border-radius:12px;border:2px solid var(--cream2);background:var(--paper);color:var(--night2);cursor:pointer;transition:all .15s;flex:1;}
+.count-btn.active{background:var(--gold);border-color:var(--gold-deep);color:#3a2a06;box-shadow:0 3px 0 var(--gold-deep);}
+
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<script>
+(function(){
+  /* ===== Dessin de Kiki sur canvas (PNG 512px) ===== */
+  function drawKiki(size){
+    const c=document.createElement('canvas');
+    c.width=c.height=size;
+    const ctx=c.getContext('2d');
+    const s=size/512; // facteur d'échelle
+
+    // Fond arrondi bleu nuit
+    ctx.fillStyle='#1d2348';
+    ctx.beginPath();
+    const r=80*s;
+    ctx.moveTo(r,0);ctx.lineTo(size-r,0);ctx.arcTo(size,0,size,r,r);
+    ctx.lineTo(size,size-r);ctx.arcTo(size,size,size-r,size,r);
+    ctx.lineTo(r,size);ctx.arcTo(0,size,0,size-r,r);
+    ctx.lineTo(0,r);ctx.arcTo(0,0,r,0,r);
+    ctx.closePath();ctx.fill();
+
+    function E(cx,cy,rx,ry,col){
+      ctx.save();ctx.translate(cx*s,cy*s);ctx.scale(rx*s,ry*s);
+      ctx.beginPath();ctx.arc(0,0,1,0,Math.PI*2);ctx.restore();
+      ctx.fillStyle=col;ctx.fill();
+    }
+    function C(cx,cy,r,col){
+      ctx.beginPath();ctx.arc(cx*s,cy*s,r*s,0,Math.PI*2);
+      ctx.fillStyle=col;ctx.fill();
+    }
+
+    // Ailes (ellipses latérales orange)
+    E(84,310,42,70,'#e09a1f');
+    E(428,310,42,70,'#e09a1f');
+
+    // Corps principal
+    E(256,295,148,165,'#f6b53c');
+
+    // Ventre clair
+    E(256,315,105,122,'#fde7bf');
+
+    // Oreilles (triangles)
+    ctx.fillStyle='#e09a1f';
+    ctx.beginPath();ctx.moveTo(148*s,165*s);ctx.lineTo(168*s,72*s);ctx.lineTo(214*s,152*s);ctx.closePath();ctx.fill();
+    ctx.beginPath();ctx.moveTo(364*s,165*s);ctx.lineTo(344*s,72*s);ctx.lineTo(298*s,152*s);ctx.closePath();ctx.fill();
+
+    // Cercles des yeux (blanc-cassé)
+    C(198,242,68,'#fffaf0');C(314,242,68,'#fffaf0');
+    // Contour des yeux
+    ctx.strokeStyle='#e7c98a';ctx.lineWidth=4*s;
+    ctx.beginPath();ctx.arc(198*s,242*s,68*s,0,Math.PI*2);ctx.stroke();
+    ctx.beginPath();ctx.arc(314*s,242*s,68*s,0,Math.PI*2);ctx.stroke();
+
+    // Pupilles
+    C(198,242,34,'#1d2348');C(314,242,34,'#1d2348');
+
+    // Reflets (blanc)
+    C(212,228,11,'#ffffff');C(326,228,11,'#ffffff');
+
+    // Bec
+    ctx.fillStyle='#e08a2a';
+    ctx.beginPath();ctx.moveTo(256*s,266*s);ctx.lineTo(228*s,305*s);ctx.lineTo(284*s,305*s);ctx.closePath();ctx.fill();
+
+    // Pattes
+    ctx.strokeStyle='#e08a2a';ctx.lineWidth=7*s;ctx.lineCap='round';
+    ctx.beginPath();ctx.moveTo(224*s,490*s);ctx.lineTo(224*s,456*s);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(204*s,490*s);ctx.lineTo(244*s,490*s);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(288*s,490*s);ctx.lineTo(288*s,456*s);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(268*s,490*s);ctx.lineTo(308*s,490*s);ctx.stroke();
+
+    // Petites joues roses
+    ctx.fillStyle='rgba(245,158,139,0.5)';
+    ctx.beginPath();ctx.arc(140*s,290*s,28*s,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(372*s,290*s,28*s,0,Math.PI*2);ctx.fill();
+
+    return c;
+  }
+
+  // Génère l'icône 512px et 180px
+  const icon512=drawKiki(512);
+  const icon180=drawKiki(180);
+  const png512=icon512.toDataURL('image/png');
+  const png180=icon180.toDataURL('image/png');
+
+  // Manifest PWA (Android + Chrome)
+  const m={
+    name:"Kiki850 — TOEIC",short_name:"Kiki850",
+    description:"Entraînement TOEIC · objectif 850",
+    start_url:"./",display:"standalone",
+    background_color:"#1d2348",theme_color:"#1d2348",
+    orientation:"portrait-primary",
+    icons:[
+      {src:png512,sizes:"512x512",type:"image/png",purpose:"any maskable"},
+      {src:png180,sizes:"180x180",type:"image/png",purpose:"any"}
+    ]
+  };
+  const blob=new Blob([JSON.stringify(m)],{type:'application/json'});
+  document.getElementById('manifest-link').href=URL.createObjectURL(blob);
+
+  // Apple touch icon (iOS home screen)
+  const li=document.createElement('link');
+  li.rel='apple-touch-icon';li.sizes='180x180';li.href=png180;
+  document.head.appendChild(li);
+
+  // Favicon
+  const fav=document.createElement('link');
+  fav.rel='icon';fav.type='image/png';fav.href=drawKiki(64).toDataURL('image/png');
+  document.head.appendChild(fav);
+})();
+</script>
+<script type="text/babel" data-presets="react">
+
+const {useState,useEffect,useMemo,useCallback}=React;
+const norm=(s)=>(s||"").trim().toLowerCase().replace(/\s+/g," ").replace(/[.,!?;:]/g,"").replace(/[’']/g,"'");
+const pick=(a)=>a[Math.floor(Math.random()*a.length)];
+const TARGET=850,START=600;
+function speak(t,r=0.9){try{const s=window.speechSynthesis;s.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=r;u.pitch=1;const v=s.getVoices().find(x=>/en[-_]/i.test(x.lang));if(v)u.voice=v;s.speak(u);return true;}catch(e){return false;}}
+
+/* == KIKI == */
+function Kiki({mood="idle",size=96}){
+  const happy=mood==="happy"||mood==="celebrate",oops=mood==="oops",think=mood==="think",blink=mood==="idle";
+  return(
+    <svg width={size} height={size} viewBox="0 0 120 120" style={{flexShrink:0}} aria-label="Kiki">
+      <defs>
+        <radialGradient id="ky"><stop offset="0%" stopColor="#fde7bf"/><stop offset="100%" stopColor="#f6cf86"/></radialGradient>
+        <linearGradient id="kx" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#f6b53c"/><stop offset="100%" stopColor="#e09a1f"/></linearGradient>
+      </defs>
+      <rect x="22" y="104" width="76" height="7" rx="3.5" fill="#8a6a3a"/>
+      <ellipse cx="26" cy={happy?58:70} rx="15" ry="24" fill="url(#kx)" style={{transition:"all .25s",transformOrigin:"26px 60px",transform:happy?"rotate(-18deg)":"rotate(6deg)"}}/>
+      <ellipse cx="94" cy={happy?58:70} rx="15" ry="24" fill="url(#kx)" style={{transition:"all .25s",transformOrigin:"94px 60px",transform:happy?"rotate(18deg)":"rotate(-6deg)"}}/>
+      <ellipse cx="60" cy="66" rx="36" ry="40" fill="url(#kx)"/>
+      <ellipse cx="60" cy="72" rx="25" ry="30" fill="url(#ky)"/>
+      <path d="M34 32 L40 14 L50 30 Z" fill="#e09a1f"/><path d="M86 32 L80 14 L70 30 Z" fill="#e09a1f"/>
+      <circle cx="46" cy="52" r="16" fill="#fffaf0" stroke="#e7c98a" strokeWidth="2"/>
+      <circle cx="74" cy="52" r="16" fill="#fffaf0" stroke="#e7c98a" strokeWidth="2"/>
+      {oops?(<><path d="M38 52 q8-7 16 0" stroke="#1d2348" strokeWidth="3.5" fill="none" strokeLinecap="round"/><path d="M66 52 q8-7 16 0" stroke="#1d2348" strokeWidth="3.5" fill="none" strokeLinecap="round"/></>)
+      :happy?(<><path d="M38 54 q8 8 16 0" stroke="#1d2348" strokeWidth="3.5" fill="none" strokeLinecap="round"/><path d="M66 54 q8 8 16 0" stroke="#1d2348" strokeWidth="3.5" fill="none" strokeLinecap="round"/></>)
+      :think?(<><circle cx="46" cy="52" r="7" fill="#1d2348"/><circle cx="74" cy="52" r="7" fill="#1d2348"/><circle cx="48.5" cy="49.5" r="2.2" fill="#fff"/><circle cx="76.5" cy="49.5" r="2.2" fill="#fff"/><path d="M56 64 q4 3 8 0" stroke="#c8855a" strokeWidth="2.5" fill="none" strokeLinecap="round"/></>)
+      :(<><circle cx="46" cy="52" r="7" fill="#1d2348">{blink&&<animate attributeName="ry" values="7;1;7" dur="3.2s" repeatCount="indefinite"/>}</circle><circle cx="74" cy="52" r="7" fill="#1d2348">{blink&&<animate attributeName="ry" values="7;1;7" dur="3.2s" repeatCount="indefinite"/>}</circle><circle cx="48.5" cy="49.5" r="2.4" fill="#fff"/><circle cx="76.5" cy="49.5" r="2.4" fill="#fff"/></>)}
+      <path d="M60 60 l-6 8 h12 Z" fill="#e08a2a"/>
+      {happy&&(<><circle cx="36" cy="66" r="5" fill="#f59e8b" opacity=".55"/><circle cx="84" cy="66" r="5" fill="#f59e8b" opacity=".55"/></>)}
+      <path d="M50 104 v4 m-4 0 h8 M70 104 v4 m-4 0 h8" stroke="#e08a2a" strokeWidth="3" strokeLinecap="round"/>
+    </svg>
+  );
+}
+
+/* == TEST D'ÉVALUATION (20 questions, 3 niveaux) == */
+const ASSESS_QS=[
+  // Niveau 1 — B1 facile (7 questions)
+  {t:"mcq",s:"She ___ to work every day.",opts:["go","goes","going","is go"],a:1,ex:"3ᵉ pers. sing. → **goes**.",lvl:1},
+  {t:"trans",word:"a deadline",opts:["une réunion","une date limite","un salaire","un contrat"],a:1,ex:"a deadline → **une date limite**.",lvl:1},
+  {t:"mcq",s:"The meeting is ___ Monday.",opts:["in","on","at","since"],a:1,ex:"Jour précis → **on** Monday.",lvl:1},
+  {t:"trans",word:"to hire",opts:["licencier","embaucher","démissionner","muter"],a:1,ex:"to hire → **embaucher**.",lvl:1},
+  {t:"mcq",s:"She is ___ engineer.",opts:["a","an","the","Ø"],a:1,ex:"Son voyelle → **an** engineer.",lvl:1},
+  {t:"trans",word:"siblings",opts:["des cousins","des frères et sœurs","des voisins","des amis"],a:1,ex:"siblings → **frères et sœurs**.",lvl:1},
+  {t:"mcq",s:"I ___ in Paris for 5 years. I still live there.",opts:["lived","have lived","live","was living"],a:1,ex:"Durée jusqu'au présent → **have lived**.",lvl:1},
+  // Niveau 2 — B1-B2 intermédiaire (7 questions)
+  {t:"mcq",s:"You ___ submit the report by Friday.",opts:["should","must not","could not","won't"],a:0,ex:"Conseil → **should**.",lvl:2},
+  {t:"trans",word:"sensible",opts:["sensible (ému)","raisonnable","délicat","perceptible"],a:1,ex:"Faux ami → sensible = **raisonnable**.",lvl:2},
+  {t:"mcq",s:"We received ___ applications.",opts:["much","many","little","less"],a:1,ex:"Dénombrable → **many**.",lvl:2},
+  {t:"mcq",s:"This option is ___ than the previous one.",opts:["more cheap","cheaper","cheapest","cheap"],a:1,ex:"Adjectif court → **cheaper**.",lvl:2},
+  {t:"trans",word:"however",opts:["donc","cependant","parce que","ensuite"],a:1,ex:"however → **cependant**.",lvl:2},
+  {t:"mcq",s:"We have worked together ___ 2019.",opts:["for","since","during","by"],a:1,ex:"Depuis un point de départ → **since**.",lvl:2},
+  {t:"trans",word:"a lecture",opts:["une lecture","une conférence / cours magistral","un devoir","une leçon"],a:1,ex:"Faux ami : a lecture → **une conférence**.",lvl:2},
+  // Niveau 3 — B2 avancé (6 questions)
+  {t:"mcq",s:"If we ___ one more day, we would finalize.",opts:["have","had","will have","would have"],a:1,ex:"Type 2 : if + **prétérit** → had.",lvl:3},
+  {t:"mcq",s:"We need a ___ table.",opts:["wooden large round","large round wooden","round wooden large","wooden round large"],a:1,ex:"Ordre TAFCOM : Taille → Forme → Matière.",lvl:3},
+  {t:"mcq",s:"She didn't reply, ___?",opts:["did she","didn't she","does she","is she"],a:0,ex:"Phrase négative → tag affirmatif : **did she**.",lvl:3},
+  {t:"mcq",s:"If we had clarified the scope, we ___ misunderstandings.",opts:["will avoid","would avoid","would have avoided","avoided"],a:2,ex:"Type 3 → **would have avoided**.",lvl:3},
+  {t:"trans",word:"to convict",opts:["acquitter","condamner","arrêter","juger"],a:1,ex:"to convict → **condamner**.",lvl:3},
+  {t:"mcq",s:"The report ___ by the manager last Tuesday.",opts:["writes","is written","was written","has written"],a:2,ex:"Passif prétérit → **was written**.",lvl:3},
+];
+
+function getLevel(score){
+  if(score<=7)  return{code:"b1",  name:"B1 — Intermédiaire",       toeic:"TOEIC estimé : 400–600",desc:"Parfait point de départ ! Toutes les notions se débloqueront progressivement.",  unlock:1};
+  if(score<=13) return{code:"b1b2",name:"B1+ — Intermédiaire sup.",  toeic:"TOEIC estimé : 600–720",desc:"Bonne base ! Les 3 premiers modules de chaque section sont débloqués d'emblée.",unlock:3};
+  return         {code:"b2",  name:"B2 — Avancé",              toeic:"TOEIC estimé : 720–800+",desc:"Excellent niveau ! Tu peux aller directement sur les points avancés.",        unlock:5};
+}
+
+/* == CONTENU PEDAGOGIQUE == */
+const M=(p,s,o,a,ex)=>({t:"mcq",prompt:p,s,opts:o,a,ex});
+const T=(w,o,a,ex)=>({t:"trans",word:w,opts:o,a,ex});
+const F=(p,s,a,acc,h,ex)=>({t:"fill",prompt:p,s,a,accept:acc,hint:h,ex});
+const B=(fr,tok,ex)=>({t:"build",fr,tokens:tok,a:tok.slice(),ex});
+
+const SECTIONS=[
+{id:"gram",title:"Grammaire",sub:"14 chapitres + Passif & Relatives · Sitayeb 2026",icon:"📘",units:[
+  {id:"g1",emoji:"👋",bg:"#fff2d6",title:"Se présenter",sub:"Présent simple & progressif · Ch.1",
+   lesson:"Présent simple = habitudes / vérités générales. Progressif be+-ing = action en cours maintenant. Verbes d'état (know, love, want) : jamais de -ing.",qs:[
+    M("3ᵉ pers. sing.","She ___ for a multinational company.",["work","works","working","is work"],1,"**works**."),
+    F("Progressif","Right now, I ___ an email.","am writing",["am writing","i am writing"],"verbe : to write","**am writing**."),
+    B("Je travaille dans le service client.",["I","work","in","customer","service"],"Présent simple : habitude."),
+    M("Habitude","He usually ___ the meeting at 9 a.m.",["start","starts","is starting","started"],1,"usually = **starts**."),
+    M("Verbe d'état","I ___ what you mean.",["am knowing","know","am understanding","understanding"],1,"know = verbe d'état → jamais -ing : **know**."),
+    M("Négation","He ___ work on Sundays.",["don't","doesn't","isn't","aren't"],1,"3ᵉ pers. sing. → **doesn't**."),
+    M("Question","___ she speak French?",["Does","Do","Is","Has"],0,"Verbe lexical → do-support : **Does**."),
+  ]},
+  {id:"g2",emoji:"💬",bg:"#e6e5fb",title:"Donner son opinion",sub:"Auxiliaires modaux · Ch.2",
+   lesson:"should = conseil · must = déduction forte/obligation · could/might = possibilité · would = politesse · can = capacité.",qs:[
+    M("Conseil","You ___ notify the client if the test fails.",["should","must not","could not","won't"],0,"**should**."),
+    M("Déduction","Her car is here, so she ___ be in the office.",["can't","must","would","should"],1,"Quasi-certitude → **must**."),
+    B("Nous pourrions ajouter une étape.",["We","could","add","a","step"],"could + base verbale."),
+    F("Conseil","I think we ___ reconsider the budget.","should",["should"],"= nous devrions","**should** = recommandation."),
+    M("Permission polie","___ I leave early today?",["Must","Should","May","Would"],2,"Demande polie → **May**."),
+    M("Capacité passée","When I was young, I ___ run very fast.",["could","can","would","should"],0,"Capacité dans le passé → **could**."),
+    M("Semi-modal","You ___ to register before attending.",["must","need","should","might"],1,"need **to** = semi-modal."),
+  ]},
+  {id:"g3",emoji:"📍",bg:"#d6efe4",title:"Méner un débat",sub:"Prépositions & coordination · Ch.3",
+   lesson:"Temps : in (périodes), on (jours/dates), at (heure/lieu précis). Échéance : by (au plus tard). Durée : for. Point de départ : since.",qs:[
+    M("Jour","The kick-off is ___ Monday.",["in","on","at","since"],1,"**on** Monday."),
+    M("Échéance","Send the report ___ Friday at the latest.",["until","for","by","since"],2,"Date butoir → **by**."),
+    F("Heure","The training starts ___ 9 a.m. sharp.","at",["at"],"moment ponctuel","**at** 9 a.m."),
+    B("Nous attendons depuis deux semaines.",["We","have","been","waiting","for","two","weeks"],"Durée continue → for."),
+    M("Depuis quand","We have worked together ___ 2019.",["for","since","during","by"],1,"Point de départ → **since**."),
+    M("Lieu : volume","The documents are ___ the drawer.",["on","at","in","by"],2,"Volume/contenant → **in**."),
+    M("Cause","The delay was ___ bad weather.",["because","due to","thanks to","since"],1,"Cause négative → **due to**."),
+  ]},
+  {id:"g4",emoji:"✈️",bg:"#fde0d6",title:"Raconter un voyage",sub:"Passé composé, prétérit, past perfect · Ch.4",
+   lesson:"Date précise → prétérit. Bilan lié au présent → present perfect. Antériorité dans un passé → past perfect (had + V-en). Jamais present perfect avec date précise.",qs:[
+    M("Date précise","I ___ Rome last year.",["have visited","visited","had visited","visit"],1,"last year → **visited**."),
+    M("Bilan","I ___ already visited Lisbon.",["have","had","did","was"],0,"Bilan → **have** visited."),
+    M("Antériorité","By the time we arrived, the train ___.",["leaves","has left","had already left","is leaving"],2,"**had** already left."),
+    F("Irrégulier","We ___ the bus, then visited the museum.","took",["took"],"to take (irrégulier)","take → **took**."),
+    B("Le musée avait fermé quand nous sommes arrivés.",["The","museum","had","closed","when","we","arrived"],"had closed + arrived."),
+    M("Yet / already","Has the client replied ___?",["already","yet","just","since"],1,"Interro/nég → **yet**."),
+    M("Durée","I have been waiting ___ 40 minutes.",["since","for","during","until"],1,"Durée → **for**."),
+    M("Piège date","I ___ her last week.",["have seen","had seen","saw","see"],2,"Date précise → prétérit : **saw**."),
+  ]},
+  {id:"g5",emoji:"🔮",bg:"#e6e5fb",title:"Parler de l'avenir",sub:"will · be going to · Ch.5",
+   lesson:"will = décision immédiate, promesse, prédiction. be going to = plan prévu, évidence visible. Après when/if/as soon as → présent simple (jamais will).",qs:[
+    M("Évidence","Look at those clouds — it ___ rain.",["will","is going to","shall","would"],1,"Indice visible → **is going to**."),
+    M("Décision immédiate","That’s heavy — I ___ help you.",["am going to","will","would","help"],1,"Sur le moment → **will**."),
+    M("Après when","When the mock-up ___ ready, we will sign off.",["will be","is","would be","be"],1,"Après when → présent : **is**."),
+    B("Nous confirmerons à 15 heures.",["We","will","confirm","at","3","p.m."],"Engagement → will confirm."),
+    M("Plan prévu","We ___ launch the product next quarter.",["will","are going to","would","shall"],1,"Plan déjà établi → **are going to**."),
+    M("As soon as","As soon as she ___, we'll start.",["arrives","will arrive","is arriving","arrived"],0,"Subordonnée temporelle → présent : **arrives**."),
+  ]},
+  {id:"g6",emoji:"✉️",bg:"#fff2d6",title:"Écrire un email",sub:"Articles Ø · a/an · the · Ch.6",
+   lesson:"a/an : 1ᴺᵉ mention ou catégorie. the : élément connu ou unique. Ø : générique, indénombrable non spécifié. an devant son voyelle.",qs:[
+    M("1ᴺᵉ mention","Please find ___ invoice attached.",["a","an","the","Ø"],1,"1ᴺᵉ mention + son voyelle → **an**."),
+    M("Reprise","___ invoice is due on Friday.",["A","An","The","Ø"],2,"Élément connu → **the**."),
+    F("Métier","He is ___ engineer at a start-up.","an",["an"],"son voyelle","**an** engineer."),
+    B("Je joins le rapport.",["I","am","attaching","the","report"],"report identifié → the."),
+    M("Générique","___ coffee is produced in Brazil.",["A","An","The","Ø"],3,"Générique → **Ø** coffee."),
+    M("Unique","Could you open ___ window, please?",["a","an","the","Ø"],2,"Unique dans le contexte → **the**."),
+    M("Pays","She lived in ___ United States.",["a","an","the","Ø"],2,"Nom composé → **the**."),
+  ]},
+  {id:"g7",emoji:"🤝",bg:"#d6efe4",title:"Participer à une réunion",sub:"Le conditionnel types 1-3 · Ch.7",
+   lesson:"Type 1 : if + présent → will. Type 2 : if + prétérit → would. Type 3 : if + past perfect → would have + V-en. If I were you… (toujours WERE).",qs:[
+    M("Type 1","If the team ___ early, we will start the demo.",["will finish","finishes","finished","would finish"],1,"Type 1 : if + **présent**."),
+    M("Type 2","If we ___ one more day, we would finalize.",["have","had","will have","would have"],1,"Type 2 : if + **prétérit**."),
+    M("WERE","If I ___ you, I would propose a pilot.",["was","am","were","would be"],2,"**If I were you** → toujours WERE."),
+    M("Type 3","If we had clarified the scope, we ___ misunderstandings.",["will avoid","would avoid","would have avoided","avoided"],2,"Type 3 → **would have avoided**."),
+    B("Si tout est prêt, nous confirmerons.",["If","everything","is","ready","we","will","confirm"],"Type 1 : if + présent, will."),
+    M("Unless","___ an issue arises, we won’t add extra tests.",["If","Unless","Although","When"],1,"**Unless** = if not."),
+  ]},
+  {id:"g8",emoji:"📊",bg:"#fde0d6",title:"Comparer des options",sub:"Comparatif, superlatif · Ch.8",
+   lesson:"Court + -er than. Long → more…than. Superlatif : the -est / the most. Irréguliers : good/better/best, bad/worse/worst. like = ressemblance, as = rôle.",qs:[
+    M("Comparatif court","This option is ___ than the previous one.",["more cheap","cheaper","cheapest","cheap"],1,"**cheaper**."),
+    M("Superlatif irrégulier","It’s the ___ solution we have.",["goodest","more good","best","better"],2,"good → **the best**."),
+    M("like vs as","She works ___ a consultant.",["like","as","than","so"],1,"Rôle réel → **as**."),
+    B("Cette démo est plus courte.",["This","demo","is","shorter"],"short → shorter."),
+    M("as…as","The new version is ___ efficient ___ the old one.",["as / as","more / than","so / as","than / as"],0,"Égalité → **as … as**."),
+    M("Irrégulier","Her performance was ___ than last year.",["badder","worse","more bad","worst"],1,"bad → **worse**."),
+  ]},
+  {id:"g9",emoji:"🎨",bg:"#e6e5fb",title:"Décrire",sub:"Les adjectifs & ordre TAFCOM · Ch.9",
+   lesson:"Ordre : Opinion → Taille, Âge, Forme, Couleur, Origine, Matière (TAFCOM). Postposés (a-) : asleep, alive, alone. Prénominaux : sheer, mere, main.",qs:[
+    M("Ordre TAFCOM","We need a ___ table.",["wooden large round","large round wooden","round wooden large","wooden round large"],1,"Taille → Forme → Matière."),
+    M("Postposé","Which is correct?",["an asleep child","the child is asleep","a asleep child","asleep child"],1,"asleep (a-) → postposé : **the child is asleep**."),
+    M("Prénominal","It was ___ nonsense.",["sheer","alive","afraid","aware"],0,"**sheer** uniquement prénominal."),
+    B("Un petit pont en pierre italien.",["A","small","Italian","stone","bridge"],"Taille → Origine → Matière."),
+    M("Adjectif composé","They offer a ___ service.",["user friendly","user-friendly","users friendly","user friendlier"],1,"Adjectif composé → **user-friendly**."),
+  ]},
+  {id:"g10",emoji:"🔢",bg:"#d6efe4",title:"Quantifier",sub:"Les quantifieurs · Ch.10",
+   lesson:"many/few + dénombrables. much/little + indénombrables. fewer (dén.) vs less (indén.). a few = quelques (positif), few = peu (négatif).",qs:[
+    M("Dénombrable","We received ___ applications.",["much","many","a little","less"],1,"**many**."),
+    M("Indénombrable","There was ___ time left.",["few","a few","little","many"],2,"Indénombrable négatif → **little**."),
+    M("fewer vs less","There were ___ bugs after the review.",["less","fewer","much","little"],1,"Dénombrable → **fewer**."),
+    M("None","___ of them replied.",["No","None","Any","Either"],1,"Reprise pronominale → **None**."),
+    M("Either/or","It was ___ a webinar ___ a workshop.",["neither/nor","either/or","both/and","no/none"],1,"Alternative → **either … or**."),
+    M("a few vs few","___ mentors agreed to help.",["Few","A few","Little","Much"],1,"Petite quantité positive → **A few**."),
+  ]},
+  {id:"g11",emoji:"💫",bg:"#fff2d6",title:"Exprimer une émotion",sub:"Les adverbes · Ch.11",
+   lesson:"Formation : adj + -ly. Exceptions : good → well, hard → hard, fast → fast. Place : avant adjectif, après verbe/be.",qs:[
+    M("Modifier adjectif","We’re ___ grateful.",["deep","deeply","depth","deepness"],1,"**deeply**."),
+    M("Manière","She handled it ___.",["calm","calmly","calmness","calmer"],1,"**calmly**."),
+    M("Attitude","___, the results were disappointing.",["Frank","Frankly","Franking","Frankness"],1,"**Frankly**."),
+    M("Irrégulier","good → ___",["goodly","well","goodfully","nicely"],1,"good → **well**."),
+    M("Intensifieur","The results were ___ better than expected.",["slight","slightly","slighting","a slight"],1,"**slightly** better."),
+  ]},
+  {id:"g12",emoji:"🏷️",bg:"#e6e5fb",title:"Évoquer son travail",sub:"Le génitif · Ch.12",
+   lesson:"'s = possession/agent (the team’s objectives). Pluriel -s → apostrophe seule (managers’). of = partie d’un tout inanimé.",qs:[
+    B("les objectifs de l’équipe",["the","team's","objectives"],"the team’s objectives."),
+    M("Génitif générique","un permis de conduire =",["a license of driver","a driver's license","a driving's license","a drive license"],1,"**a driver’s license**."),
+    M("Pluriel possessif","the ___ meeting (les managers)",["manager's","managers'","managers's","managers"],1,"Pluriel -s → **managers’**."),
+    M("'s vs of","la poignée de la porte =",["the door's handle","the handle of the door","the handle's door","door of the handle"],1,"Inanimé → **of**."),
+    M("Génitif de mesure","It’s a ___ walk from here.",["ten minutes'","ten minute's","ten minutes","tens minutes'"],0,"Mesure de temps → **ten minutes’** walk."),
+  ]},
+  {id:"g13",emoji:"🎲",bg:"#fde0d6",title:"Discuter d'un loisir",sub:"Fonctionnement du nom · Ch.13",
+   lesson:"Indénombrables : advice, information, furniture, luggage, equipment, news. Pluriels irréguliers : foot→feet, child→children. Invariables : fish, series, sheep.",qs:[
+    M("Indénombrable","I need ___ about this.",["an advice","a advice","some advice","advices"],2,"**some advice**."),
+    M("Pluriel irrégulier","one foot, two ___",["foots","feet","feets","foot"],1,"**feet**."),
+    M("Invariable","I caught three ___ at the lake.",["fishes","fish","fishs","fishies"],1,"fish → **fish** (invariable)."),
+    F("Dénombreur","Could you give me a ___ of advice?","piece",["piece"],"= un conseil","**a piece of** advice."),
+    M("News","The news ___ bad.",["are","were","is","have been"],2,"news = indénombrable singulier → **is**."),
+  ]},
+  {id:"g14",emoji:"❓",bg:"#d6efe4",title:"Expliquer une procédure",sub:"Interrogatives, négatives & tags · Ch.14",
+   lesson:"Tags : auxiliaire + pronom, polarité inversée. Do-support pour verbes lexicaux. Whose = à qui. Whom = complément. Indirect questions : ordre sujet+verbe.",qs:[
+    M("Tag affirmatif/négatif","You’re coming to the meeting, ___?",["aren't you","don't you","isn't it","are you"],0,"Affirmatif (be) → tag négatif : **aren’t you**."),
+    M("Do-support","___ you send the report yesterday?",["Do","Did","Are","Have"],1,"Passé → **Did**."),
+    M("Tag après négatif","She didn’t reply, ___?",["did she","didn't she","does she","is she"],0,"Négatif → tag affirmatif : **did she**."),
+    M("Whose","___ laptop is this?",["Who","Whom","Whose","Who's"],2,"Possession → **Whose**."),
+    M("Indirect question","Could you tell me where the office ___?",["is","was","it is","is it"],2,"Indirect → ordre affirmatif : **it is**."),
+  ]},
+  {id:"g_pass",emoji:"🔄",bg:"#fff2d6",title:"La voix passive",sub:"Passive voice · TOEIC essentiel",
+   lesson:"Passif = be + participe passé. Présent : is/are + V-en. Prétérit : was/were + V-en. Present perfect : has/have been + V-en. Futur : will be + V-en.",qs:[
+    M("Prétérit passif","The report ___ by the manager last Tuesday.",["writes","is written","was written","has written"],2,"**was written**."),
+    M("Présent passif","Invoices ___ every month.",["send","are sent","were sent","have sent"],1,"**are sent**."),
+    M("Futur passif","The results ___ tomorrow morning.",["will announce","will be announced","are announced","announce"],1,"**will be announced**."),
+    M("PP passif","The contract ___ already.",["has signed","has been signed","signed","is signed"],1,"**has been signed**."),
+    B("Le projet a été approuvé par le comité.",["The","project","was","approved","by","the","committee"],"was approved by."),
+    M("Modal + passif","All requests ___ in writing.",["must submit","must be submitted","must submitted","are must submitted"],1,"Modal + passif → **must be submitted**."),
+  ]},
+  {id:"g_rel",emoji:"🔗",bg:"#e6e5fb",title:"Propositions relatives",sub:"who, which, that, whose, whom · TOEIC",
+   lesson:"who = personnes. which = choses. that = déterminatives (pers./choses). whose = possession. La relative non-restrictive est encadrée de virgules (no that).",qs:[
+    M("Personne","The colleague ___ helped me is away.",["which","who","whose","whom"],1,"Personne → **who**."),
+    M("Chose","The report ___ you sent was clear.",["who","whose","which","whom"],2,"Chose → **which** (ou that)."),
+    M("Possession","The client ___ order was delayed called.",["who","which","whose","that"],2,"Possession → **whose**."),
+    M("Non-restrictive","My manager, ___ has 20 years’ experience, is retiring.",["that","which","who","whose"],2,"Non-restrictive + personne → **who** (pas that)."),
+    M("Omission","The email ___ you received was from the CEO.",["which","that","who","(rien)"],3,"Relatif complément peut être omis."),
+  ]},
+]},
+{id:"daily",title:"Vie quotidienne",sub:"Corps, vêtements, alimentation, maison, famille, santé…",icon:"🏠",units:[
+  {id:"v_body",emoji:"🫀",bg:"#fde0d6",title:"Le corps humain",sub:"The human body · Vocab I",lesson:"Idiomes : to cost an arm and a leg (coûter très cher), to keep an eye on (surveiller).",qs:[
+    T("the brain",["le foie","le cerveau","le rein","le poumon"],1,"the brain → **le cerveau**."),
+    T("an ankle",["un poignet","un coude","une cheville","un genou"],2,"an ankle → **une cheville**."),
+    M("Idiome","To cost an arm and a ___.",["leg","hand","foot","head"],0,"**an arm and a leg** = coûter très cher."),
+    T("the skull",["la colonne vertébrale","le crâne","l'épaule","le sternum"],1,"the skull → **le crâne**."),
+    T("the spine",["la nuque","la colonne vertébrale","l'épaule","le sternum"],1,"the spine → **la colonne vertébrale**."),
+  ]},
+  {id:"v_clothes",emoji:"👔",bg:"#e6e5fb",title:"Les vêtements",sub:"Clothes · Vocab II",lesson:"Faux ami : a slip = une combinaison / fond de robe (FR slip = briefs).",qs:[
+    T("a tie",["une ceinture","une cravate","une écharpe","un gant"],1,"a tie → **une cravate**."),
+    T("trousers",["une jupe","un pantalon","une chemise","un manteau"],1,"**un pantalon**."),
+    M("Idiome","To roll up one’s ___ = se mettre au travail.",["socks","sleeves","gloves","collar"],1,"**sleeves**."),
+    T("a waistcoat",["une chemise","un gilet de costume","un polo","un anorak"],1,"a waistcoat → **un gilet de costume**."),
+    T("a hoodie",["un manteau","un pull à capuche","un blazer","un cardigan"],1,"a hoodie → **un pull à capuche**."),
+  ]},
+  {id:"v_food",emoji:"🥗",bg:"#d6efe4",title:"L'alimentation",sub:"Food · Vocab III",lesson:"Faux ami : grapes = du raisin (≠ grappe = bunch). Indénombrables : bread, beef, rice.",qs:[
+    T("an eggplant",["une courgette","une aubergine","un poivron","un concombre"],1,"**une aubergine**."),
+    T("lamb",["du bœuf","de l'agneau","du porc","du poulet"],1,"**de l'agneau**."),
+    T("grapes",["une grappe","du raisin","une cerise","un pamplemousse"],1,"grapes → **du raisin**."),
+    T("a zucchini",["une aubergine","un poivron","une courgette","un concombre"],2,"**une courgette**."),
+    M("Quantité","Can I have ___ bread, please?",["a","an","some","many"],2,"Indénombrable → **some** bread."),
+  ]},
+  {id:"v_house",emoji:"🛋️",bg:"#fff2d6",title:"La maison",sub:"The house · Vocab IV",lesson:"a lease = un bail · spacious = spacieux · furniture = indénombrable.",qs:[
+    T("a lease",["un loyer","un bail","une caution","un acte de vente"],1,"**un bail**."),
+    T("curtains",["des coussins","des rideaux","des tapis","des étagères"],1,"**des rideaux**."),
+    M("Indénombrable","We need new ___.",["a furniture","furnitures","furniture","some furnitures"],2,"furniture = indénombrable → **furniture**."),
+    T("a landlord",["un locataire","un propriétaire","un gardien","un voisin"],1,"**un propriétaire**."),
+  ]},
+  {id:"v_emotions",emoji:"💗",bg:"#e6e5fb",title:"Émotions & sentiments",sub:"Emotions · Vocab VI",lesson:"Idiomes : to be over the moon (aux anges), to lose one’s temper (perdre son sang-froid).",qs:[
+    T("grief",["la joie","le chagrin","la peur","la honte"],1,"**le chagrin**."),
+    T("pride",["la colère","la fierté","l'espoir","l'envie"],1,"**la fierté**."),
+    M("Idiome","To be over the ___ = être aux anges.",["moon","sky","stars","clouds"],0,"**over the moon**."),
+    T("anxiety",["le soulagement","l'anxiété","la confiance","la joie"],1,"**l'anxiété**."),
+  ]},
+  {id:"v_health",emoji:"🩺",bg:"#d6efe4",title:"La santé",sub:"Health · Vocab VII",lesson:"Faux ami : medicine = un médicament (le médecin = a doctor). to prevent = empêcher.",qs:[
+    T("a vaccine",["un virus","un vaccin","une maladie","un remède"],1,"**un vaccin**."),
+    T("contagious",["mortel","contagieux","nocif","inoffensif"],1,"**contagieux**."),
+    T("a prescription",["une consultation","une ordonnance","un diagnostic","un traitement"],1,"**une ordonnance**."),
+    M("Faux ami","medicine (anglais) = ___",["la médecine","le médecin","un médicament","une prescription"],2,"medicine = **un médicament** (ou la médecine)."),
+  ]},
+  {id:"v_transport",emoji:"🚆",bg:"#fff2d6",title:"Les transports",sub:"Transportations · Vocab VIII",lesson:"a commute = trajet domicile-travail · a fare = prix du billet · rush hour = heure de pointe.",qs:[
+    T("a traffic jam",["un carrefour","un embouteillage","un rond-point","une voie"],1,"**un embouteillage**."),
+    T("a commute",["un péage","un quai","un trajet domicile-travail","un horaire"],2,"**trajet domicile-travail**."),
+    T("rush hour",["heure de fermeture","heure de pointe","heure d'ouverture","heure creuse"],1,"**heure de pointe**."),
+    M("Idiome","To miss the ___ = rater le coche.",["boat","train","bus","plane"],0,"to miss the **boat**."),
+  ]},
+]},
+{id:"work",title:"Formation & travail",sub:"Éducation, emploi, loisirs, sport, tourisme…",icon:"💼",units:[
+  {id:"v_edu",emoji:"🎓",bg:"#e6e5fb",title:"L'éducation",sub:"Education · Vocab IX",lesson:"Faux ami : a lecture = une conférence (≠ FR lecture = reading). tuition fees = frais de scolarité.",qs:[
+    T("a degree",["une note","un diplôme","un cours","un examen"],1,"**un diplôme**."),
+    T("a lecture",["une lecture","une conférence / cours magistral","un devoir","un manuel"],1,"Faux ami → **une conférence**."),
+    T("tuition fees",["la bourse","les frais de scolarité","l'inscription","le diplôme"],1,"**frais de scolarité**."),
+    T("a scholarship",["un examen","une bourse d'études","un stage","un cursus"],1,"**une bourse d'études**."),
+    T("literacy",["la numératie","la maîtrise de l'écrit","la créativité","la mémoire"],1,"literacy → **maîtrise de la lecture et de l'écriture**."),
+  ]},
+  {id:"v_work",emoji:"🧑‍💼",bg:"#fff2d6",title:"Le travail",sub:"Work · Vocab X",lesson:"a deadline = date limite · to hire = embaucher · to resign = démissionner · headquarters = siège social.",qs:[
+    T("a deadline",["une date limite","une réunion","un délai de paiement","une tâche"],0,"**une date limite**."),
+    T("to hire",["licencier","embaucher","démissionner","muter"],1,"**embaucher** (≠ to fire)."),
+    M("Idiome","She wants to ___ the corporate ladder.",["jump","climb","build","run"],1,"**climb** the corporate ladder."),
+    T("headquarters",["une succursale","les locaux","un siège social","un bureau"],2,"**siège social**."),
+    T("a pay rise",["une prime","une augmentation de salaire","un bonus","un remboursement"],1,"**une augmentation**."),
+    T("to resign",["être licencié","démissionner","être muté","prendre sa retraite"],1,"**démissionner**."),
+  ]},
+  {id:"v_sport",emoji:"⚽",bg:"#fde0d6",title:"Le sport",sub:"Sport · Vocab XII",lesson:"a referee = un arbitre · a coach = un entraîneur · to score = marquer · a draw = match nul.",qs:[
+    T("a referee",["un entraîneur","un arbitre","un joueur","un supporter"],1,"**un arbitre**."),
+    T("a coach",["un arbitre","un entraîneur","un capitaine","un gardien"],1,"**un entraîneur**."),
+    T("to score",["perdre","gagner","marquer un point","s'entraîner"],2,"**marquer**."),
+    T("a draw",["une défaite","un penalty","un match nul","une victoire"],2,"**un match nul**."),
+  ]},
+  {id:"v_tourism",emoji:"🧳",bg:"#fff2d6",title:"Le tourisme",sub:"Tourism · Vocab XIII",lesson:"luggage = les bagages (indénombrable) · a landmark = un site emblématique · customs = la douane.",qs:[
+    T("a sightseeing tour",["un séjour","une visite touristique","un vol","une réservation"],1,"**visite touristique**."),
+    T("a landmark",["un hôtel","un guide","un site / monument emblématique","une carte"],2,"**site emblématique**."),
+    T("customs",["les coutumes","la douane","les billets","les bagages"],1,"customs (pl.) = **la douane**."),
+    T("a layover",["un vol direct","une escale","un retard","un départ"],1,"**une escale**."),
+  ]},
+]},
+{id:"society",title:"Société & culture",sub:"Environnement, arts, médias, sciences, Internet…",icon:"🏛️",units:[
+  {id:"v_env",emoji:"🌍",bg:"#fff2d6",title:"Nature & environnement",sub:"The environment · Vocab XX",lesson:"global warming = réchauffement climatique · carbon footprint = empreinte carbone · renewable energy.",qs:[
+    T("global warming",["la pollution","le réchauffement climatique","l'effet de serre","le recyclage"],1,"**réchauffement climatique**."),
+    T("a carbon footprint",["une empreinte numérique","une empreinte carbone","une émission","une trace"],1,"**empreinte carbone**."),
+    T("renewable energy",["l'énergie fossile","l'énergie renouvelable","le nucléaire","le charbon"],1,"**énergie renouvelable**."),
+    T("a drought",["une inondation","une sécheresse","une tempête","un tremblement de terre"],1,"**une sécheresse**."),
+    T("deforestation",["le reboisement","la déforestation","l'érosion","la pollution"],1,"**la déforestation**."),
+  ]},
+  {id:"v_tech",emoji:"💻",bg:"#e6e5fb",title:"Internet & technologies",sub:"Vocab XXVI",lesson:"an attachment = pièce jointe · cloud storage = stockage en nuage · a firewall = un pare-feu.",qs:[
+    T("an attachment",["un courriel","une pièce jointe","un fichier","un lien"],1,"**une pièce jointe**."),
+    T("cloud storage",["le disque dur","le stockage en nuage","la mémoire vive","le serveur"],1,"**stockage en nuage**."),
+    T("a firewall",["un antivirus","un pare-feu","un réseau","un serveur"],1,"**un pare-feu**."),
+    T("a data breach",["une panne de réseau","une violation de données","une mise à jour","un bug"],1,"**une violation de données**."),
+  ]},
+  {id:"v_eco",emoji:"📈",bg:"#d6efe4",title:"Économie & commerce",sub:"Vocab XXVII",lesson:"a shareholder = un actionnaire · GDP = PIB · a merger = une fusion · bankruptcy = la faillite.",qs:[
+    T("supply and demand",["l'offre et la demande","l'achat et la vente","le profit et la perte","l'import et l'export"],0,"**l'offre et la demande**."),
+    T("a shareholder",["un client","un actionnaire","un fournisseur","un créancier"],1,"**un actionnaire**."),
+    T("a merger",["une acquisition","une fusion d'entreprises","une faillite","une cotation"],1,"**une fusion**."),
+    T("GDP",["le taux d'intérêt","le PIB","la balance commerciale","le déficit"],1,"GDP = **le PIB**."),
+  ]},
+  {id:"v_media",emoji:"📰",bg:"#fde0d6",title:"Les médias",sub:"Vocab XXIII",lesson:"a headline = un gros titre · broadcasting = la diffusion · fake news = infox.",qs:[
+    T("a headline",["un article","un gros titre","une rubrique","une légende"],1,"**un gros titre**."),
+    T("broadcasting",["l'impression","la diffusion / radiodiffusion","l'édition","la publicité"],1,"**la diffusion**."),
+    T("fake news",["des vraies nouvelles","des infox / désinformation","un éditorial","une opinion"],1,"**infox / désinformation**."),
+  ]},
+]},
+{id:"civ",title:"Civilisation & institutions",sub:"Économie, politique, droit, crime, diplomatie",icon:"⚖️",units:[
+  {id:"v_pol",emoji:"🗳️",bg:"#e6e5fb",title:"La politique",sub:"Politics · Vocab XXVIII",lesson:"a ballot = bulletin de vote · a bill = projet de loi · a constituency = une circonscription.",qs:[
+    T("a ballot",["une urne","un bulletin de vote","un parti","une campagne"],1,"**bulletin de vote**."),
+    T("a bill",["une voix","un projet de loi","un décret","un référendum"],1,"**projet de loi**."),
+    T("a constituency",["un mandat","une circonscription","un électeur","une coalition"],1,"**une circonscription**."),
+  ]},
+  {id:"v_law",emoji:"⚖️",bg:"#d6efe4",title:"Le droit",sub:"Law · Vocab XXIX",lesson:"a lawsuit = un procès · evidence = des preuves (indénombrable) · to acquit = acquitter.",qs:[
+    T("a lawsuit",["un avocat","un procès","un témoin","un verdict"],1,"**un procès**."),
+    T("evidence",["un indice isolé","des preuves","un alibi","un témoignage"],1,"evidence = **des preuves** (indénombrable)."),
+    T("to acquit",["condamner","acquitter","arrêter","inculper"],1,"**acquitter** (≠ to convict)."),
+    M("Passif judiciaire","The suspect ___ of all charges.",["was acquitted","acquitted","has acquit","is acquitting"],0,"**was acquitted**."),
+  ]},
+  {id:"v_intl",emoji:"🌐",bg:"#fff2d6",title:"Relations internationales",sub:"Vocab XXXI",lesson:"to ease tensions = apaiser les tensions · to mediate = arbitrer.",qs:[
+    T("to sign a treaty",["rompre un traité","conclure / signer un traité","déclarer la guerre","lever un embargo"],1,"**conclure un traité**."),
+    T("to impose sanctions",["lever un embargo","imposer des sanctions","signer un traité","franchir une frontière"],1,"**imposer des sanctions**."),
+    T("to ease tensions",["déclencher une crise","apaiser les tensions","créer des tensions","rompre une impasse"],1,"**apaiser les tensions**."),
+  ]},
+]},
+{id:"annex",title:"Annexes",sub:"Verbes irréguliers, connecteurs, faux amis, phrasal verbs…",icon:"📑",units:[
+  {id:"a_irr",emoji:"🔁",bg:"#e6e5fb",title:"Verbes irréguliers",sub:"Annexe 1",lesson:"Groupe 1 (identiques) : put/put/put. Groupe 2 (pareil prét./pp) : buy/bought/bought. Groupe 3 (tous différents) : go/went/gone.",qs:[
+    M("Prétérit","go → ___",["goed","went","gone","going"],1,"go → **went** → gone."),
+    M("Participe passé","eat → ate → ___",["eated","ate","eaten","eat"],2,"**eaten**."),
+    F("Prétérit","buy → ___","bought",["bought"],"irrégulier","**bought**."),
+    M("Prétérit","write → ___",["writed","wrote","written","wrotten"],1,"**wrote** → written."),
+    M("PP","speak → spoke → ___",["speaked","spoken","spoke","speaking"],1,"**spoken**."),
+    M("Invariable","cut → ___",["cutted","cuts","cut","cuting"],2,"**cut** (invariable)."),
+  ]},
+  {id:"a_conn",emoji:"🔗",bg:"#fff2d6",title:"Connecteurs logiques",sub:"Annexe 2",lesson:"Cause : because of, due to. Conséquence : therefore, as a result. Concession : however, although, despite.",qs:[
+    T("however",["donc","cependant / pourtant","parce que","ensuite"],1,"**cependant**."),
+    T("therefore",["cependant","par conséquent / donc","bien que","sauf"],1,"**par conséquent**."),
+    T("although",["donc","bien que","ainsi","en outre"],1,"**bien que**."),
+    T("moreover",["cependant","de plus / en outre","donc","parce que"],1,"**de plus**."),
+    T("despite",["à cause de","malgré","donc","afin de"],1,"despite + GN → **malgré**."),
+    M("Choix","The project was delayed ___ technical issues.",["although","due to","despite","therefore"],1,"Cause → **due to**."),
+  ]},
+  {id:"a_faux",emoji:"🎭",bg:"#fde0d6",title:"Les faux amis",sub:"Annexe 4",lesson:"sensible = raisonnable · actually = en fait · to attend = assister à · to demand = exiger · large = grand.",qs:[
+    T("sensible",["sensible (ému)","raisonnable","perceptible","délicat"],1,"**raisonnable** (FR sensible = sensitive)."),
+    T("actually",["actuellement","en fait / en réalité","peut-être","autrefois"],1,"**en fait**."),
+    T("to attend",["attendre","assister à","tenter","prétendre"],1,"**assister à**."),
+    T("to demand",["demander poliment","exiger","suggérer","interroger"],1,"**exiger**."),
+    T("large",["large (en largeur)","grand (en taille)","lourd","épais"],1,"**grand** (≠ FR large = wide)."),
+    T("sympathetic",["sympathique","compatissant","indifférent","enthousiaste"],1,"**compatissant** (≠ FR sympathique = nice)."),
+    T("to deceive",["décevoir","tromper / duper","refuser","convaincre"],1,"**tromper** (≠ FR décevoir = to disappoint)."),
+  ]},
+  {id:"a_phrasal",emoji:"⚙️",bg:"#d6efe4",title:"Phrasal verbs pro",sub:"Annexe 7",lesson:"follow up (suivi) · carry out (réaliser) · put off (reporter) · call off (annuler) · set up (mettre en place).",qs:[
+    F("Particule","I will follow ___ on the meeting.","up",["up"],"= faire un suivi","follow **up**."),
+    T("to carry out",["annuler","réaliser / mener à bien","reporter","superviser"],1,"**réaliser**."),
+    M("Phrasal verb","Let's ___ off the meeting until Monday.",["put","take","call","give"],0,"**put** off = reporter."),
+    T("to look into",["ignorer","examiner / se pencher sur","déléguer","interrompre"],1,"**examiner**."),
+    T("to set up",["annuler","mettre en place / créer","reporter","abandonner"],1,"**mettre en place**."),
+    T("to run out of",["manquer de / être à court de","accumuler","partager","gérer"],0,"**manquer de**."),
+  ]},
+  {id:"a_abbr",emoji:"🔤",bg:"#e6e5fb",title:"Abréviations courantes",sub:"Annexe 6",lesson:"ASAP · FYI · EOD · TBD · RSVP · N/A · CEO · HR.",qs:[
+    T("ASAP",["au fait","dès que possible","fin de journée","pour information"],1,"As Soon As Possible."),
+    T("FYI",["dès que possible","pour votre information","à déterminer","non applicable"],1,"For Your Information."),
+    M("Sigle","EOD = ___",["End Of Day","Every Other Day","Email Of Director","End Of Discussion"],0,"**End Of Day**."),
+    T("TBD",["à organiser","à déterminer","à discuter","à valider"],1,"To Be Determined."),
+    T("CEO",["le directeur financier","le PDG / directeur général","le directeur marketing","le DRH"],1,"Chief Executive Officer → **PDG**."),
+  ]},
+]},
+{id:"audio",title:"Compréhension orale",sub:"Listening & dictée · voix anglaise du navigateur",icon:"🎧",units:[
+  {id:"au1",emoji:"🔊",bg:"#e6e5fb",title:"Écoute & réponds",sub:"Listening · questions",lesson:"Appuie sur ▶ pour écouter la voix anglaise. Réécoute autant que tu veux. La transcription apparaît après ta réponse.",qs:[
+    {t:"listen",prompt:"Écoute puis réponds.",audio:"The meeting has been postponed to next Monday at 3 p.m.",q:"When is the meeting?",opts:["Friday at 3","Next Monday at 3 p.m.","Today at 9","Next year"],a:1,ex:"Transcription : « postponed to next Monday at 3 p.m. »"},
+    {t:"listen",prompt:"Écoute puis réponds.",audio:"Please submit your report by Friday at the latest.",q:"What is the deadline?",opts:["Monday","Friday","No deadline","Next month"],a:1,ex:"Transcription : « by Friday at the latest »."},
+    {t:"listen",prompt:"Écoute puis réponds.",audio:"The shipment will arrive in two business days.",q:"When will it arrive?",opts:["In two business days","In two weeks","Tomorrow","It already arrived"],a:0,ex:"Transcription : « in two business days »."},
+    {t:"listen",prompt:"Écoute puis réponds.",audio:"Could you transfer me to the accounting department, please?",q:"Which department?",opts:["Marketing","Accounting","Sales","HR"],a:1,ex:"Transcription : « accounting department »."},
+    {t:"listen",prompt:"Écoute puis réponds.",audio:"We are pleased to announce a ten percent discount this week.",q:"What is announced?",opts:["A price increase","A 10% discount","A new product","A store closure"],a:1,ex:"Transcription : « a ten percent discount »."},
+    {t:"listen",prompt:"Écoute puis réponds.",audio:"The conference room is booked until noon. Please use room 204 instead.",q:"What should people do?",opts:["Leave the building","Use room 204","Call the secretary","Book another room"],a:1,ex:"Transcription : « use room 204 instead »."},
+    {t:"listen",prompt:"Écoute puis réponds.",audio:"I'm afraid the flight to Tokyo has been cancelled due to bad weather.",q:"What happened to the flight?",opts:["Delayed","Cancelled","Diverted","On time"],a:1,ex:"Transcription : « cancelled due to bad weather »."},
+  ]},
+  {id:"au2",emoji:"✍️",bg:"#fde0d6",title:"Dictée",sub:"Listening · dictation",lesson:"Écoute et écris exactement la phrase entendue. La ponctuation n'est pas prise en compte.",qs:[
+    {t:"dictation",prompt:"Écoute et écris la phrase.",audio:"The store opens at nine.",a:"the store opens at nine",accept:["the store opens at nine"],ex:"« The store opens at nine. »"},
+    {t:"dictation",prompt:"Écoute et écris la phrase.",audio:"I would like to schedule a call.",a:"i would like to schedule a call",accept:["i would like to schedule a call","i'd like to schedule a call"],ex:"« I would like to schedule a call. »"},
+    {t:"dictation",prompt:"Écoute et écris la phrase.",audio:"Please find the invoice attached.",a:"please find the invoice attached",accept:["please find the invoice attached"],ex:"« Please find the invoice attached. »"},
+    {t:"dictation",prompt:"Écoute et écris la phrase.",audio:"The meeting is on Monday morning.",a:"the meeting is on monday morning",accept:["the meeting is on monday morning"],ex:"« The meeting is on Monday morning. »"},
+    {t:"dictation",prompt:"Écoute et écris la phrase.",audio:"She was promoted to senior manager last year.",a:"she was promoted to senior manager last year",accept:["she was promoted to senior manager last year"],ex:"« She was promoted to senior manager last year. »"},
+  ]},
+]},
+];
+
+const ALL_UNITS=SECTIONS.flatMap(s=>s.units);
+const totalQs=ALL_UNITS.reduce((n,u)=>n+u.qs.length,0);
+const unitSection={};
+SECTIONS.forEach(s=>s.units.forEach((u,i)=>{unitSection[u.id]={sectionId:s.id,index:i};}));
+const KIKI_HOME=["Hou hou ! Tout le programme est là !","On vise le 850, une section à la fois.","Régularité de chouette : un peu chaque jour !","Choisis un chapitre, je veille sur tes progrès."];
+const KIKI_OK=["Bravo, joli réflexe !","Hou hou, parfait !","Tu progresses vers 850 !","Excellent, continue !","C'est tout bon !"];
+const KIKI_NO=["Pas grave, on apprend !","Presque ! Lis l'astuce.","L'erreur fait partie du voyage.","Courage, la prochaine est pour toi !"];
+
+/* == STORAGE == */
+const STORE="kiki_v4";
+function loadSave(){try{return JSON.parse(localStorage.getItem(STORE)||"{}");}catch(e){return {};}}
+function doSave(d){try{localStorage.setItem(STORE,JSON.stringify(d));}catch(e){}}
+
+
+
+/* ===== ÉCRAN PARAMÈTRES ===== */
+function Settings({onBack,apiKey,onSaveKey}){
+  const [inp,setInp]=useState(apiKey||'');
+  const [saved,setSaved]=useState(false);
+  const hasKey=!!apiKey;
+  const save=()=>{const k=inp.trim();onSaveKey(k);setSaved(true);setTimeout(()=>setSaved(false),2000);};
+  const del=()=>{setInp('');onSaveKey('');};
+  return(
+    <div style={{flex:1,display:'flex',flexDirection:'column',minHeight:0}}>
+      <div className="shead">
+        <button className="xclose" onClick={onBack}>×</button>
+        <div style={{fontFamily:"'Fraunces',serif",fontWeight:800,fontSize:18}}>Paramètres</div>
+        <div className="spacer"/>
+      </div>
+      <div className="scroll">
+        <div className="settings-wrap">
+          <div className="info-night">
+            🔒 <b>Ta clé API n'est jamais dans le code.</b><br/>
+            Stockée uniquement sur <b>ton appareil</b> (localStorage).<br/>
+            Le repo GitHub peut rester public — aucun risque.
+          </div>
+          <div className="settings-label">Génération IA · API Claude</div>
+          <div className={`api-box ${hasKey?'active':''}`}>
+            <div className="api-status">
+              <div className={`api-dot ${hasKey?'on':'off'}`}/>
+              <div className="api-label">{hasKey?'✓ Clé configurée':'Clé non configurée'}</div>
+            </div>
+            <div className="api-hint">
+              {hasKey
+                ?"Kiki peut générer des exercices illimités sur chaque thème. Bouton ✨ actif sur toutes les unités."
+                :"Entre ta clé Anthropic pour activer la génération d'exercices IA illimités."}
+            </div>
+            {!hasKey&&<>
+              <input className="api-input" type="password" placeholder="sk-ant-api03-…"
+                value={inp} onChange={e=>setInp(e.target.value)}
+                autoCapitalize="off" autoCorrect="off" spellCheck="false"/>
+              <a className="api-link" href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">Obtenir une clé →</a>
+              <button className="btn btn-gold" style={{marginTop:14}} disabled={!inp.trim()} onClick={save}>
+                {saved?'✓ Enregistré !':'Enregistrer la clé'}
+              </button>
+            </>}
+            {hasKey&&<button className="btn btn-ghost" style={{fontSize:14,padding:12}} onClick={del}>Supprimer la clé</button>}
+          </div>
+          <div className="settings-label">Comment ça marche</div>
+          <div className="settings-card">
+            ✨ Chaque unité affiche un bouton <b>Générer</b>.<br/>
+            🤖 Kiki appelle Claude avec le contexte du chapitre.<br/>
+            📝 5 nouveaux exercices TOEIC, toujours inédits.<br/>
+            🔁 Autant de sessions que tu veux.
+          </div>
+          <div className="settings-label">Mises à jour</div>
+          <div className="settings-card">
+            Quand tu mets à jour <b>index.html</b> sur GitHub, l'app
+            se rafraîchit automatiquement à la prochaine ouverture
+            depuis l'écran d'accueil (fin de cache, ~quelques minutes).
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ===== MODAL GÉNÉRATION IA ===== */
+function GenModal({unit,apiKey,onDone,onClose}){
+  const [status,setStatus]=useState('choose'); // choose | loading | done | error
+  const [count,setCount]=useState(10);
+  const [questions,setQuestions]=useState([]);
+  const [errorMsg,setErrorMsg]=useState('');
+
+  const generate=async()=>{
+    setStatus('loading');
+    const maxTok=Math.max(2000, count*320);
+    const prompt=`Tu es un expert TOEIC (Sitayeb 2026). Génère exactement ${count} exercices variés pour l'unité "${unit.title}" (${unit.sub}).
+Leçon : "${unit.lesson}"
+Retourne UNIQUEMENT un JSON array valide de ${count} éléments, sans markdown ni texte autour. Types disponibles :
+- QCM     : {"t":"mcq","prompt":"Choisis.","s":"phrase avec ___","opts":["A","B","C","D"],"a":0,"ex":"**explication**."}
+- Trad    : {"t":"trans","word":"mot anglais","opts":["fr1","fr2","fr3","fr4"],"a":0,"ex":"explication."}
+- Trous   : {"t":"fill","prompt":"Complète.","s":"phrase avec ___","a":"réponse","accept":["réponse","variante"],"hint":"indice","ex":"explication."}
+- Phrase  : {"t":"build","fr":"Phrase en français à traduire","tokens":["mot1","mot2","mot3","mot4"],"a":["mot1","mot2","mot3","mot4"],"ex":"explication."}
+Règles : varie bien les 4 types, mélange grammaire et vocabulaire, niveau B1-B2 TOEIC, exemples contextuels professionnels.`;
+    try{
+      const res=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'x-api-key':apiKey,
+          'anthropic-version':'2023-06-01',
+          'anthropic-dangerous-direct-browser-access':'true'
+        },
+        body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:maxTok,messages:[{role:'user',content:prompt}]})
+      });
+      if(!res.ok){const e=await res.json();throw new Error(e.error?.message||`Erreur ${res.status}`);}
+      const data=await res.json();
+      const text=data.content[0].text.trim().replace(/```json\s*|```/g,'').trim();
+      const qs=JSON.parse(text);
+      setQuestions(qs);
+      setStatus('done');
+    }catch(e){setErrorMsg(e.message||'Erreur inconnue');setStatus('error');}
+  };
+
+  return(
+    <div className="gen-overlay" onClick={()=>status!=='loading'&&onClose()}>
+      <div className="gen-modal" onClick={e=>e.stopPropagation()}>
+
+        {status==='choose'&&<>
+          <Kiki mood="idle" size={80}/>
+          <div className="gen-title">Générer des exercices</div>
+          <div className="gen-sub"><b>{unit.title}</b><br/>Combien d'exercices veux-tu ?</div>
+          <div className="count-selector">
+            {[5,10,15,20].map(n=>(
+              <button key={n} className={`count-btn ${count===n?'active':''}`} onClick={()=>setCount(n)}>
+                {n}
+              </button>
+            ))}
+          </div>
+          <button className="btn btn-gold" style={{marginBottom:10}} onClick={generate}>
+            ✨ Générer {count} exercices
+          </button>
+          <button className="btn btn-ghost" style={{fontSize:14,padding:12}} onClick={onClose}>Annuler</button>
+        </>}
+
+        {status==='loading'&&<>
+          <Kiki mood="think" size={80}/>
+          <div className="gen-title">Kiki génère…</div>
+          <div className="gen-sub">{count} exercices TOEIC sur<br/><b>{unit.title}</b></div>
+          <div className="spinner"/>
+          <div style={{fontSize:12,color:'var(--muted)',marginTop:8}}>~{count<=10?'5–10':'10–20'} secondes</div>
+        </>}
+
+        {status==='done'&&<>
+          <Kiki mood="happy" size={80}/>
+          <div className="gen-title">{questions.length} exercices prêts !</div>
+          <div className="gen-sub">{unit.title} · B1-B2 TOEIC</div>
+          <button className="btn btn-gold" style={{marginBottom:10}} onClick={()=>onDone(questions)}>
+            Lancer la session ✨
+          </button>
+          <button className="btn btn-ghost" style={{fontSize:14,padding:12,marginBottom:8}} onClick={()=>setStatus('choose')}>
+            Changer le nombre
+          </button>
+        </>}
+
+        {status==='error'&&<>
+          <Kiki mood="oops" size={80}/>
+          <div className="gen-title">Oups…</div>
+          <div className="gen-error">{errorMsg}</div>
+          <button className="btn btn-gold" style={{marginBottom:10}} onClick={generate}>Réessayer</button>
+          <button className="btn btn-ghost" style={{fontSize:14,padding:12}} onClick={()=>setStatus('choose')}>Modifier le nombre</button>
+        </>}
+
+      </div>
+    </div>
+  );
+}
+
+/* ===== POPUP INSTALLATION iOS PWA ===== */
+function InstallPrompt() {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const isIOS = /iP(hone|ad|od)/i.test(navigator.userAgent);
+    const notChrome = !/CriOS|Chrome|GSA|FxiOS/i.test(navigator.userAgent);
+    const isSafari = /Safari/i.test(navigator.userAgent) && notChrome;
+    const isStandalone = window.navigator.standalone === true ||
+                         window.matchMedia('(display-mode:standalone)').matches;
+    const dismissed = localStorage.getItem('kiki_pwa_ok');
+    if (isIOS && isSafari && !isStandalone && !dismissed) {
+      const t = setTimeout(() => setShow(true), 3500);
+      return () => clearTimeout(t);
+    }
+  }, []);
+  const dismiss = (permanent) => {
+    if (permanent) localStorage.setItem('kiki_pwa_ok', '1');
+    setShow(false);
+  };
+  if (!show) return null;
+  return (
+    <div className="pwa-overlay" onClick={() => dismiss(false)}>
+      <div className="pwa-sheet" onClick={e => e.stopPropagation()}>
+        <div className="pwa-handle"/>
+        <div className="pwa-header">
+          <Kiki mood="happy" size={52}/>
+          <div>
+            <div className="pwa-title">Installer Kiki850</div>
+            <div className="pwa-sub">Accès direct · plein écran · sans Safari</div>
+          </div>
+          <button className="pwa-close" onClick={() => dismiss(false)}>×</button>
+        </div>
+        <div className="pwa-steps">
+          <div className="pwa-step">
+            <span className="pwa-num">1</span>
+            <span>Appuie sur <b>Partager</b> <span className="pwa-share-icon">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16,6 12,2 8,6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+              Partager</span>
+            </span>
+          </div>
+          <div className="pwa-step">
+            <span className="pwa-num">2</span>
+            <span>Sélectionne <b>"Sur l'écran d'accueil"</b></span>
+          </div>
+          <div className="pwa-step">
+            <span className="pwa-num">3</span>
+            <span>Appuie sur <b>Ajouter</b> — c'est fait !</span>
+          </div>
+        </div>
+        <div className="pwa-arrow">▼</div>
+        <button className="btn btn-gold" style={{fontSize:15,padding:"14px"}} onClick={() => dismiss(true)}>
+          Compris !
+        </button>
+        <button className="pwa-skip" onClick={() => dismiss(true)}>Ne plus afficher</button>
+      </div>
+    </div>
+  );
+}
+
+/* == APP == */
+function App(){
+  const init=useMemo(loadSave,[]);
+  const [screen,setScreen]=useState(init.assessed?"home":"splash");
+  const [progress,setProgress]=useState(init.progress||{});
+  const [xp,setXp]=useState(init.xp||0);
+  const [bestStreak,setBestStreak]=useState(init.bestStreak||0);
+  const [streak,setStreak]=useState(0);
+  const [userLevel,setUserLevel]=useState(init.level||null);
+  const [activeUnit,setActiveUnit]=useState(null);
+  const [session,setSession]=useState(null);
+  const [assessScore,setAssessScore]=useState(null);
+  const [apiKey,setApiKey]=useState(()=>localStorage.getItem('kiki_apikey')||'');
+  const [genUnit,setGenUnit]=useState(null);
+  const [homeMsg]=useState(pick(KIKI_HOME));
+  useEffect(()=>{try{window.speechSynthesis.getVoices();}catch(e){}},[]);
+  const correctCount=useMemo(()=>Object.values(progress).reduce((n,p)=>n+(p.best||0),0),[progress]);
+  const estScore=Math.min(TARGET,START+Math.round((correctCount/totalQs)*(TARGET-START)));
+  const gaugePct=Math.round(((estScore-START)/(TARGET-START))*100);
+  const getInitialUnlocks=(lvl)=>{
+    if(!lvl||lvl.unlock<=1) return {};
+    const fp={};
+    SECTIONS.forEach(s=>s.units.slice(0,lvl.unlock-1).forEach(u=>{fp[u.id]={best:u.qs.length,done:true};}));
+    return fp;
+  };
+  const isUnlocked=(unitId)=>{
+    const info=unitSection[unitId];if(info.index===0) return true;
+    const sec=SECTIONS.find(s=>s.id===info.sectionId);
+    return !!progress[sec.units[info.index-1].id]?.done;
+  };
+  const isRecommended=(unitId)=>{
+    if(!userLevel) return false;
+    const info=unitSection[unitId];
+    return info.index===userLevel.unlock-1||info.index===userLevel.unlock;
+  };
+  const startUnit=(unit)=>{setActiveUnit(unit);setSession({idx:0,correct:0,answers:[]});setStreak(0);setScreen("session");};
+  const onAnswered=(ok)=>{
+    setSession(s=>({...s,correct:s.correct+(ok?1:0),answers:[...s.answers,ok]}));
+    if(ok){setStreak(v=>{const nv=v+1;setBestStreak(b=>Math.max(b,nv));return nv;});setXp(v=>v+10);}
+    else setStreak(0);
+  };
+  const nextQuestion=()=>{
+    setSession(s=>{
+      const ni=s.idx+1;
+      if(ni>=activeUnit.qs.length){finishSession(s);return s;}
+      return{...s,idx:ni};
+    });
+  };
+  const finishSession=(s)=>{
+    const best=Math.max(progress[activeUnit.id]?.best||0,s.correct);
+    const done=s.correct>=Math.ceil(activeUnit.qs.length*0.6)||progress[activeUnit.id]?.done;
+    const np={...progress,[activeUnit.id]:{best,done}};
+    setProgress(np);const nb=Math.max(bestStreak,streak);setBestStreak(nb);
+    doSave({progress:np,xp:xp+s.correct*10,bestStreak:nb,level:userLevel,assessed:true});
+    setScreen("results");
+  };
+  const onAssessmentDone=(score,lvl)=>{
+    setAssessScore(score);setUserLevel(lvl);
+    const initProg=getInitialUnlocks(lvl);setProgress(initProg);
+    doSave({progress:initProg,xp:0,bestStreak:0,level:lvl,assessed:true});
+    setScreen("assess_result");
+  };
+  const saveApiKey=(k)=>{setApiKey(k);if(k)localStorage.setItem('kiki_apikey',k);else localStorage.removeItem('kiki_apikey');};
+  const skipAssessment=()=>{doSave({progress:{},xp:0,bestStreak:0,level:null,assessed:true});setScreen("home");};
+  return(
+    <div className="kiki-root"><div className="phone">
+        <InstallPrompt/>
+      {screen==="splash"&&<Splash onAssess={()=>setScreen("assessment")} onSkip={skipAssessment}/>}
+      {screen==="assessment"&&<Assessment onDone={onAssessmentDone} onBack={()=>setScreen("splash")}/>}
+      {screen==="assess_result"&&<AssessResult score={assessScore} level={userLevel} onContinue={()=>setScreen("home")}/>}
+      {screen==="settings"&&<Settings onBack={()=>setScreen('home')} apiKey={apiKey} onSaveKey={saveApiKey}/>}
+        {genUnit&&<GenModal unit={genUnit} apiKey={apiKey} onDone={(qs)=>{setGenUnit(null);startUnit({...genUnit,qs,lesson:genUnit.lesson});}} onClose={()=>setGenUnit(null)}/>}
+        {screen==="home"&&<Home homeMsg={homeMsg} estScore={estScore} gaugePct={gaugePct} xp={xp} bestStreak={bestStreak} correctCount={correctCount} progress={progress} isUnlocked={isUnlocked} isRecommended={isRecommended} userLevel={userLevel} onStart={startUnit} apiKey={apiKey} onSettings={()=>setScreen('settings')} onGenerate={setGenUnit}/>}
+      {screen==="session"&&activeUnit&&<Session unit={activeUnit} session={session} streak={streak} onAnswered={onAnswered} onNext={nextQuestion} onQuit={()=>{try{window.speechSynthesis.cancel();}catch(e){}setScreen("home");}}/>}
+      {screen==="results"&&activeUnit&&<Results unit={activeUnit} session={session} estScore={estScore} onHome={()=>setScreen("home")} onReplay={()=>startUnit(activeUnit)}/>}
+    </div></div>
+  );
+}
+
+/* == SPLASH == */
+function Splash({onAssess,onSkip}){
+  return(
+    <div className="splash">
+      <Kiki mood="happy" size={120}/>
+      <div className="splash-title">Kiki<b>850</b></div>
+      <div className="splash-sub">Entraînement TOEIC complet<br/>Grammaire · Vocabulaire · Écoute<br/>Objectif : score 850 🦉</div>
+      <button className="btn btn-gold" onClick={onAssess}>🎯 Évaluer mon niveau (2 min)</button>
+      <div className="divider"><span>ou</span></div>
+      <button className="btn btn-ghost" onClick={onSkip}>Commencer directement</button>
+      <p style={{fontSize:11,color:"var(--muted)",marginTop:20,lineHeight:1.5}}>{totalQs} exercices · 14 chapitres grammaire · Passif, Relatives · 20+ thèmes vocab<br/>Manuels S. Sitayeb (2026)</p>
+    </div>
+  );
+}
+
+/* == ASSESSMENT == */
+function Assessment({onDone,onBack}){
+  const [idx,setIdx]=useState(0);
+  const [answers,setAnswers]=useState([]);
+  const q=ASSESS_QS[idx];
+  const pct=Math.round((idx/ASSESS_QS.length)*100);
+  const pickAnswer=(correct)=>{
+    const newA=[...answers,correct];
+    if(idx<ASSESS_QS.length-1){setAnswers(newA);setIdx(idx+1);}
+    else{const score=newA.filter(Boolean).length;onDone(score,getLevel(score));}
+  };
+  return(
+    <div style={{flex:1,display:"flex",flexDirection:"column",minHeight:0}}>
+      <div className="shead">
+        <button className="xclose" onClick={onBack}>×</button>
+        <div className="pbar"><i style={{width:`${pct}%`}}/></div>
+        <span style={{font:"700 12px 'Space Mono'",color:"var(--muted)",flexShrink:0}}>{idx+1}/{ASSESS_QS.length}</span>
+      </div>
+      <div className="scroll" style={{paddingBottom:30}}>
+        {idx===0&&<div className="kiki-row" style={{marginTop:6}}><Kiki mood="think" size={64}/><div className="bubble"><b style={{color:"var(--gold-deep)"}}>Test d'évaluation — </b>20 questions progressives pour calibrer ton parcours. Pas de correction pendant le test !</div></div>}
+        <div style={{marginTop:idx===0?6:18}}>
+          <div className="qtype" style={{color:"var(--peri)"}}>Niveau {"⭐".repeat(q.lvl)} · Question {idx+1}/{ASSESS_QS.length}</div>
+          {q.t==="mcq"&&<AssessMCQ key={idx} q={q} onAnswer={pickAnswer}/>}
+          {q.t==="trans"&&<AssessTrans key={idx} q={q} onAnswer={pickAnswer}/>}
+        </div>
+        <div className="progress-mini">{ASSESS_QS.map((_,i)=><div key={i} className={`dot ${i<idx?"done":i===idx?"cur":""}`}/>)}</div>
+      </div>
+    </div>
+  );
+}
+function AssessMCQ({q,onAnswer}){
+  return(<>
+    <div className="qprompt">Choisis la forme correcte.</div>
+    <div className="sentence">{(q.s||"").split("___").map((p,i,arr)=>i<arr.length-1?<span key={i}>{p}<span className="blank">&nbsp;?&nbsp;</span></span>:<span key={i}>{p}</span>)}</div>
+    {q.opts.map((o,i)=><button key={i} className="opt" onClick={()=>onAnswer(i===q.a)}><span className="lab">{"ABCD"[i]}</span>{o}</button>)}
+  </>);
+}
+function AssessTrans({q,onAnswer}){
+  return(<>
+    <div className="qprompt">Que signifie ce mot en français ?</div>
+    <div className="sentence" style={{textAlign:"center",fontFamily:"'Fraunces',serif",fontSize:24,fontWeight:600}}>{q.word}</div>
+    {q.opts.map((o,i)=><button key={i} className="opt" onClick={()=>onAnswer(i===q.a)}><span className="lab">{"ABCD"[i]}</span>{o}</button>)}
+  </>);
+}
+
+/* == ASSESS RESULT == */
+function AssessResult({score,level,onContinue}){
+  const stars=score>=18?5:score>=14?4:score>=10?3:score>=7?2:1;
+  return(
+    <div className="scroll">
+      <div className="assess-wrap">
+        <Kiki mood={score>=14?"celebrate":"happy"} size={110}/>
+        <div className="assess-title">Résultat de ton évaluation</div>
+        <div className="assess-score">{score}/{ASSESS_QS.length} bonnes réponses · {"⭐".repeat(stars)}</div>
+        <div className={`level-card ${level.code}`}>
+          <div className="level-name">{level.name}</div>
+          <div className="level-toeic">{level.toeic}</div>
+          <div className="level-desc">{level.desc}</div>
+        </div>
+        <div style={{width:"100%"}}>
+          <div style={{fontFamily:"'Fraunces',serif",fontWeight:700,fontSize:15,marginBottom:10,textAlign:"left"}}>Ton programme personnalisé</div>
+          {level.code==="b1"&&<>
+            <div className="reco-bar"><div className="reco-icon">📘</div><div className="reco-text">Commence par <span>Se présenter</span> et <span>Donner son opinion</span> — les fondations.</div></div>
+            <div className="reco-bar"><div className="reco-icon">💼</div><div className="reco-text">Priorité au <span>vocabulaire du travail</span> : très fréquent aux parties 5-7.</div></div>
+            <div className="reco-bar"><div className="reco-icon">🎧</div><div className="reco-text">Lance l'écoute dès que tu maîtrises les <span>temps verbaux</span>.</div></div>
+          </>}
+          {level.code==="b1b2"&&<>
+            <div className="reco-bar"><div className="reco-icon">🔄</div><div className="reco-text">Focus sur le <span>conditionnel</span> et la <span>voix passive</span> — clés pour 700+.</div></div>
+            <div className="reco-bar"><div className="reco-icon">🎭</div><div className="reco-text">Les <span>faux amis</span> et <span>phrasal verbs</span> font gagner des points facilement.</div></div>
+            <div className="reco-bar"><div className="reco-icon">🎧</div><div className="reco-text">La compréhension orale est accessible — commence les <span>dictées</span>.</div></div>
+          </>}
+          {level.code==="b2"&&<>
+            <div className="reco-bar"><div className="reco-icon">🔗</div><div className="reco-text">Travaille les <span>relatives</span> et l'<span>ordre des adjectifs</span> pour viser 800+.</div></div>
+            <div className="reco-bar"><div className="reco-icon">⚖️</div><div className="reco-text"><span>Civilisation & institutions</span> : vocabulaire spécialisé et décisif.</div></div>
+            <div className="reco-bar"><div className="reco-icon">✍️</div><div className="reco-text">Les <span>dictées</span> améliorent ta discrimination auditive.</div></div>
+          </>}
+        </div>
+        <button className="btn btn-gold" style={{marginTop:20,width:"100%"}} onClick={onContinue}>Commencer mon programme</button>
+      </div>
+    </div>
+  );
+}
+
+/* == HOME == */
+function Home({homeMsg,estScore,gaugePct,xp,bestStreak,correctCount,progress,isUnlocked,isRecommended,userLevel,onStart,apiKey,onSettings,onGenerate}){
+  const [open,setOpen]=useState("gram");
+  const isIOS=/iP(hone|ad|od)/i.test(navigator.userAgent);
+  const isStandalone=window.navigator.standalone||window.matchMedia('(display-mode:standalone)').matches;
+  return(
+    <div className="scroll">
+      <div className="topbar">
+        <div className="brand">Kiki<b>850</b></div>
+        {userLevel&&<span className="pill lvl">{userLevel.name.split("—")[0].trim()}</span>}
+        <div className="spacer"/>
+        <span className="pill streak">🔥{bestStreak}</span>
+        <span className="pill xp">✦{xp}</span>
+        <button onClick={onSettings} style={{background:'none',border:'none',fontSize:20,cursor:'pointer',color:'var(--muted)',padding:'2px 4px',lineHeight:1}}>⚙️</button>
+      </div>
+      {isIOS&&!isStandalone&&<div className="install-banner">📲 Ajouter à l'écran d'accueil :<br/><b>Safari → Partager → Sur l'écran d'accueil</b></div>}
+      <div className="kiki-row"><Kiki mood="idle" size={78}/><div className="bubble">{homeMsg}</div></div>
+      <div className="scorecard">
+        <div className="score-lbl">Score TOEIC estimé</div>
+        <div className="gaugewrap">
+          <div className="score-num">{estScore}</div>
+          <div style={{flex:1}}>
+            <div className="gaugebar"><div className="gaugefill" style={{width:`${Math.max(4,gaugePct)}%`}}/></div>
+            <div className="gauge-meta"><span>{correctCount}/{totalQs} acquis</span><span>Objectif 850</span></div>
+          </div>
+        </div>
+      </div>
+      {SECTIONS.map(sec=>{
+        const done=sec.units.filter(u=>progress[u.id]?.done).length;
+        const isOpen=open===sec.id;
+        return(
+          <div key={sec.id}>
+            <button className="sectionhead" onClick={()=>setOpen(isOpen?null:sec.id)}>
+              <div className="sdot">{sec.icon}</div>
+              <div style={{flex:1,minWidth:0}}><div className="stitle">{sec.title}</div><div className="ssub">{sec.sub}</div></div>
+              <div className="scount">{done}/{sec.units.length}</div>
+              <div className={`chev ${isOpen?"open":""}`}>▶</div>
+            </button>
+            {isOpen&&<div className="unitwrap">{sec.units.map(u=>{
+              const p=progress[u.id];const unlocked=isUnlocked(u.id);const ud=p?.done;
+              const reco=isRecommended(u.id)&&unlocked&&!ud;
+              const pct2=p?Math.round(((p.best||0)/u.qs.length)*100):0;
+              return(
+                <button key={u.id} className={`unit ${!unlocked?"locked":""} ${ud?"done":""} ${reco?"recommended":""}`} onClick={()=>unlocked&&onStart(u)} disabled={!unlocked}>
+                  <div className="u-emoji" style={{background:u.bg}}>{unlocked?u.emoji:"🔒"}</div>
+                  <div style={{flex:1,minWidth:0}}>
+                    <div className="u-title">{u.title}{reco&&<span style={{marginLeft:6,fontSize:10,color:"var(--gold-deep)",fontWeight:800}}>★ Recommandé</span>}</div>
+                    <div className="u-sub">{u.sub}</div>
+                    {unlocked&&<div className="u-prog"><i style={{width:`${pct2}%`}}/></div>}
+                  </div>
+                  {ud?<div className="chk"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#fff" strokeWidth="3.2" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg></div>
+                    :unlocked?<div className="u-right">{u.qs.length}★</div>:null}
+                </button>
+              );
+            })}</div>}
+          </div>
+        );
+      })}
+      <p className="footnote">Score estimé = indicateur interne (600→850), pas un score officiel ETS.<br/>{totalQs} exercices · Contenu d'après S. Sitayeb (2026) · Audio : voix de l'appareil.</p>
+    </div>
+  );
+}
+
+/* == SESSION == */
+function Session({unit,session,streak,onAnswered,onNext,onQuit}){
+  const q=unit.qs[session.idx];
+  const [state,setState]=useState("answering");
+  const [wasCorrect,setWasCorrect]=useState(false);
+  const [kikiMsg,setKikiMsg]=useState("");
+  useEffect(()=>{setState("answering");},[session.idx]);
+  const handleResult=(ok)=>{setWasCorrect(ok);setKikiMsg(ok?pick(KIKI_OK):pick(KIKI_NO));setState("done");onAnswered(ok);};
+  const pct=Math.round((session.idx/unit.qs.length)*100);
+  const typeLabel={mcq:"Question à choix · Partie 5",trans:"Vocabulaire & traduction",fill:"Texte à trous",build:"Composition de phrase",listen:"Compréhension orale",dictation:"Dictée"}[q.t]||"Exercice";
+  return(
+    <div style={{flex:1,display:"flex",flexDirection:"column",minHeight:0}}>
+      <div className="shead">
+        <button className="xclose" onClick={onQuit}>×</button>
+        <div className="pbar"><i style={{width:`${pct}%`}}/></div>
+        <span className="pill streak" style={{visibility:streak>=2?"visible":"hidden"}}>🔥{streak}</span>
+      </div>
+      <div className="scroll" style={{paddingBottom:30}}>
+        {session.idx===0&&<div className="kiki-row" style={{marginTop:6}}><Kiki mood="think" size={64}/><div className="bubble"><b style={{color:"var(--gold-deep)"}}>Astuce de Kiki — </b>{unit.lesson}</div></div>}
+        <div style={{marginTop:session.idx===0?6:18}}>
+          <div className="qtype">{typeLabel}</div>
+          <QuestionBody key={`${unit.id}-${session.idx}`} q={q} state={state} onResult={handleResult}/>
+        </div>
+      </div>
+      {state==="done"&&<Feedback ok={wasCorrect} q={q} kikiMsg={kikiMsg} onNext={onNext} last={session.idx===unit.qs.length-1}/>}
+    </div>
+  );
+}
+
+function QuestionBody({q,state,onResult}){
+  if(q.t==="mcq") return <MCQ q={q} state={state} onResult={onResult}/>;
+  if(q.t==="trans") return <Trans q={q} state={state} onResult={onResult}/>;
+  if(q.t==="fill") return <Fill q={q} state={state} onResult={onResult}/>;
+  if(q.t==="build") return <Build q={q} state={state} onResult={onResult}/>;
+  if(q.t==="listen") return <Listen q={q} state={state} onResult={onResult}/>;
+  if(q.t==="dictation") return <Dictation q={q} state={state} onResult={onResult}/>;
+  return null;
+}
+
+function Choices({opts,a,chosen,locked,pickOpt}){
+  return opts.map((o,i)=>{
+    let cls="opt";
+    if(locked&&i===a) cls+=" correct"; else if(locked&&i===chosen) cls+=" wrong";
+    return <button key={i} className={cls} disabled={locked} onClick={()=>{if(!locked) pickOpt(i);}}><span className="lab">{"ABCD"[i]}</span>{o}</button>;
+  });
+}
+function rS(s){const parts=(s||"").split("___");return <span>{parts[0]}<span className="blank">&nbsp;?&nbsp;</span>{parts[1]}</span>;}
+function MCQ({q,state,onResult}){const [c,sC]=useState(null);const lk=state==="done";return(<><div className="qprompt">{q.prompt||"Choisis la forme correcte."}</div><div className="sentence">{rS(q.s)}</div><Choices opts={q.opts} a={q.a} chosen={c} locked={lk} pickOpt={i=>{sC(i);onResult(i===q.a);}}/></>);}
+function Trans({q,state,onResult}){const [c,sC]=useState(null);const lk=state==="done";return(<><div className="qprompt">{q.prompt||"Traduis en français."}</div><div className="sentence" style={{textAlign:"center",fontFamily:"'Fraunces',serif",fontSize:24,fontWeight:600}}>{q.word}</div><Choices opts={q.opts} a={q.a} chosen={c} locked={lk} pickOpt={i=>{sC(i);onResult(i===q.a);}}/></>);}
+function Fill({q,state,onResult}){
+  const [val,sV]=useState("");const lk=state==="done";
+  const ok=(q.accept||[q.a]).some(a=>norm(a)===norm(val));
+  return(<>{q.hint&&<div className="qhint">{q.hint}</div>}<div className="qprompt">{q.prompt}</div><div className="sentence">{rS(q.s)}</div><input className={`fillin ${lk?(ok?"ok":"no"):""}`} placeholder="Tape ta réponse…" value={val} disabled={lk} onChange={e=>sV(e.target.value)} onKeyDown={e=>e.key==="Enter"&&!lk&&ok!==undefined&&val.trim()&&onResult(ok)} autoCapitalize="off" autoCorrect="off" spellCheck="false"/>{!lk&&<button className="btn btn-night" style={{marginTop:14}} disabled={!val.trim()} onClick={()=>onResult(ok)}>Valider</button>}</>);
+}
+function Build({q,state,onResult}){
+  const shuffled=useMemo(()=>{const arr=q.tokens.map((w,i)=>({w,i}));for(let k=arr.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[arr[k],arr[j]]=[arr[j],arr[k]];}return arr;},[q]);
+  const [placed,setPlaced]=useState([]);const lk=state==="done";
+  const words=placed.map(id=>shuffled.find(t=>t.i===id).w);
+  const isOk=JSON.stringify(words)===JSON.stringify(q.a);
+  return(<><div className="qhint">{q.fr}</div><div className={`answerzone ${placed.length===0?"empty":""}`}>{placed.length===0?"Tap les mots dans l'ordre…":placed.map(id=><button key={id} className="chip placed" onClick={()=>!lk&&setPlaced(p=>p.filter(x=>x!==id))}>{shuffled.find(t=>t.i===id).w}</button>)}</div><div className="bank">{shuffled.map(t=><button key={t.i} className={`chip ${placed.includes(t.i)?"used":""}`} onClick={()=>!lk&&setPlaced(p=>[...p,t.i])}>{t.w}</button>)}</div>{!lk&&<button className="btn btn-night" style={{marginTop:14}} disabled={placed.length!==q.tokens.length} onClick={()=>onResult(isOk)}>Valider</button>}</>);
+}
+function PlayButton({text}){
+  const [playing,setPlaying]=useState(false);
+  const play=useCallback(()=>{const ok=speak(text);if(ok){setPlaying(true);setTimeout(()=>setPlaying(false),1200+text.length*55);}},[text]);
+  useEffect(()=>{const t=setTimeout(play,300);return()=>clearTimeout(t);},[]);
+  return(<><button className={`listenbig ${playing?"playing":""}`} onClick={play}><svg width="44" height="44" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button><button className="replay" onClick={play}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M1 4v6h6"/><path d="M3.5 10a9 9 0 1 1 .5 4"/></svg>Réécouter</button></>);
+}
+function Listen({q,state,onResult}){const [c,sC]=useState(null);const lk=state==="done";return(<><PlayButton text={q.audio}/><div className="qprompt" style={{fontSize:17,marginBottom:14}}>{q.q}</div><Choices opts={q.opts} a={q.a} chosen={c} locked={lk} pickOpt={i=>{sC(i);onResult(i===q.a);}}/></>);}
+function Dictation({q,state,onResult}){
+  const [val,sV]=useState("");const lk=state==="done";
+  const ok=(q.accept||[q.a]).some(a=>norm(a)===norm(val));
+  return(<><PlayButton text={q.audio}/><input className={`fillin ${lk?(ok?"ok":"no"):""}`} style={{textAlign:"left"}} placeholder="Écris la phrase…" value={val} disabled={lk} onChange={e=>sV(e.target.value)} onKeyDown={e=>e.key==="Enter"&&!lk&&val.trim()&&onResult(ok)} autoCapitalize="off" autoCorrect="off" spellCheck="false"/>{!lk&&<button className="btn btn-night" style={{marginTop:14}} disabled={!val.trim()} onClick={()=>onResult(ok)}>Valider</button>}</>);
+}
+
+/* == FEEDBACK == */
+function Feedback({ok,q,kikiMsg,onNext,last}){
+  const showTx=q.t==="listen"||q.t==="dictation";
+  return(
+    <div className={`feedback ${ok?"ok":"no"}`}>
+      <div className="kiki-row" style={{margin:"0 0 10px"}}><Kiki mood={ok?"happy":"oops"} size={52}/><div className="bubble">{kikiMsg}</div></div>
+      <div className={`fb-title ${ok?"ok":"no"}`}>{ok?"✓ Correct !":"✗ À revoir"}</div>
+      <div className="fb-explain" dangerouslySetInnerHTML={{__html:(q.ex||"").replace(/\*\*(.+?)\*\*/g,"<b>$1</b>")}}/>
+      {showTx&&<div className="transcript"><b>Transcription :</b> {q.audio}</div>}
+      <button className={`btn ${ok?"btn-sage":"btn-gold"}`} style={{marginTop:12}} onClick={onNext}>{last?"Voir mes résultats":"Continuer"}</button>
+    </div>
+  );
+}
+
+/* == RESULTS == */
+function Results({unit,session,estScore,onHome,onReplay}){
+  const total=unit.qs.length,correct=session.correct,pct=Math.round((correct/total)*100),great=pct>=80;
+  const confetti=useMemo(()=>Array.from({length:great?28:0}).map(()=>({left:Math.random()*100,delay:Math.random()*.6,dur:2.4+Math.random()*1.6,color:pick(["#f6b53c","#6f6ce6","#36a07c","#e15f7c","#fcd98c"])})),[great]);
+  return(
+    <div className="scroll" style={{position:"relative"}}>
+      {great&&<div className="confetti">{confetti.map((c,i)=><span key={i} className="conf" style={{left:`${c.left}%`,background:c.color,animationDelay:`${c.delay}s`,animationDuration:`${c.dur}s`}}/>)}</div>}
+      <div className="result-wrap">
+        <Kiki mood={great?"celebrate":"happy"} size={120}/>
+        <div className="bubble" style={{display:"inline-block",marginTop:14,borderRadius:18,textAlign:"center"}}>{great?"Hou hou ! Magnifique, tu voles vers le 850 !":"Bien joué ! Chaque essai te rapproche du but."}</div>
+        <div style={{fontFamily:"'Fraunces',serif",fontWeight:800,fontSize:20,marginTop:18}}>{unit.title}</div>
+        <div className="stat-grid">
+          <div className="stat"><div className="v">{correct}/{total}</div><div className="l">Bonnes réponses</div></div>
+          <div className="stat"><div className="v">{pct}%</div><div className="l">Réussite</div></div>
+          <div className="stat"><div className="v">+{correct*10}</div><div className="l">XP gagnés</div></div>
+          <div className="stat"><div className="v">{estScore}</div><div className="l">Score estimé</div></div>
+        </div>
+        {great&&<div className="delta">★ Unité maîtrisée — la suivante est débloquée</div>}
+        <div style={{display:"flex",flexDirection:"column",gap:10,marginTop:22}}>
+          <button className="btn btn-gold" onClick={onHome}>Retour au programme</button>
+          <button className="btn btn-ghost" onClick={onReplay}>Refaire cette unité</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+</script>
+</body>
+</html>
